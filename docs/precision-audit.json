@@ -1,0 +1,602 @@
+[
+ {
+  "label": "ADDRESS",
+  "value": "During",
+  "ctx": " included a review of related party transactions. During the fiscal year, we entered i",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Monitoring",
+  "ctx": "acy, discrimination, harassment, and bribery.  4. Monitoring and Enforcement: We have impl",
+  "personal": false
+ },
+ {
+  "label": "EMAIL",
+  "value": "olivierchevallier@email.com",
+  "ctx": "nezburgh * Phone Number: (123) 456-7890 * Email: [olivierchevallier@email.com](mailto:olivierchevallier@ema",
+  "personal": true
+ },
+ {
+  "label": "SWIFT",
+  "value": "IRVTUS3N",
+  "ctx": "90123456:52D:230501Copenhagen :28C:5234567890:53A:IRVTUS3N:50K:/CNGovtech Inc/:52D:New Y",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Rita",
+  "ctx": "ress as it appears on your credit card statement, Rita. For example, you can enter \"",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "West Side",
+  "ctx": "ntion: Finance Department 859651299 P.O. Box 1234 West Side, CA 90210  **Important Notes:",
+  "personal": true
+ },
+ {
+  "label": "SECRET",
+  "value": "Annalisa Solari\\Documents\\Work\\2023",
+  "ctx": " - File Type: Doc, Xls, Pdf - File Path: D:\\Users\\Annalisa Solari\\Documents\\Work\\2023 - File Names:   - Q1_Sales_Re",
+  "personal": true
+ },
+ {
+  "label": "GEO",
+  "value": "0.8515,0.8695",
+  "ctx": "g Rate,Selling Rate USD,GBP,1.3125,1.2955 EUR,GBP,0.8515,0.8695 CAD,GBP,0.6235,0.6385 CHF,GBP",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "864 SUSAN DRIVE, APT. 7390, XXXXX X",
+  "ctx": "F:XXX :86:/CAD63215,85 :98A:ELAINE H. WALLIS :98A:864 SUSAN DRIVE, APT. 7390, XXXXX X1X :98F:827599764  :108:Accoun",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Rita",
+  "ctx": "card.  Agent: I'd be happy to help you with that, Rita. Can you please confirm your ",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "NEW YORK",
+  "ctx": "4623467 :60F:CAD :61:/62JANE SMITH/456 ELM STREET/NEW YORK/NY/10001/US :86:1546587321984",
+  "personal": true
+ },
+ {
+  "label": "BANK_ACCOUNT",
+  "value": "987654321",
+  "ctx": "t Code: 301 Account Type: Savings Account Number: 987654321 Currency Code: USD Account Ho",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Northeast",
+  "ctx": "\"2022-01-08\",\"Northeast\",\"22\",\"1.5\" \"2022-01-09\",\"Northeast\",\"27\",\"0.6\" \"2022-01-10\",\"Nor",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": "rrow from Lender the sum of ________________, and Lender is willing to lend said sum t",
+  "personal": false
+ },
+ {
+  "label": "ID",
+  "value": "123456789",
+  "ctx": "r policy.  **Policy Information**  Policy Number: 123456789 Policy Holder: Irene Smith-Go",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "USA",
+  "ctx": "}U} {9:{52}234567890123} {10:{53}1234567890} {11:/USA} {12:/LONDON} {15:AAA BB BB 1",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "1\nMelting point",
+  "ctx": "ties Appearance: Clear liquid Odor: Pungent pH: 0-1 Melting point: -85°C Boiling point: 110°C  ",
+  "personal": false
+ },
+ {
+  "label": "ID",
+  "value": "HO-1234-56789",
+  "ctx": "3-4567 Email: john.doe@example.com Policy Number: HO-1234-56789  **Incident Details**  Date o",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "TORONTO",
+  "ctx": ",220331:57A:/CRCAD5000,4.2500,CAD,COSTCO WHOLSALE,TORONTO,ON,M3C3R2,52,220331:59A:/CRUS",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Los Angeles",
+  "ctx": " days of delivery.  Issued by: MSC Shipping Lines Los Angeles, CA, USA  Authorized Signatur",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": "e sum of ________________, which shall be held by Lender as an escrow deposit, to be",
+  "personal": false
+ },
+ {
+  "label": "PHONE",
+  "value": "111.222.333",
+  "ctx": "_address\": \"123 Main St, Toronto\", \"ip_address\": \"111.222.333.44\", \"iban\": \"CA1201234455678",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "London",
+  "ctx": " Shipping Lines Registered Office: 22 Bishopgate, London, EC2N 1HH, UK  Description of",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Rita",
+  "ctx": "es?  Customer: Sure, it's 789.  Agent: Thank you, Rita. I've verified your card. Now",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Rita",
+  "ctx": "Chris. I'll try that now.  Agent: You're welcome, Rita. Feel free to reach out if yo",
+  "personal": true
+ },
+ {
+  "label": "EMAIL",
+  "value": "info@smithjoneslaw.com",
+  "ctx": "6-7890   - Email: [info@smithjoneslaw.com](mailto:info@smithjoneslaw.com)  Itemized Legal Fees:  | Dat",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "William",
+  "ctx": "o the Elite Plan. | | 10:04:00 AM | Great choice, William. Your upgrade to the Elite Pl",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "62JANE SMITH",
+  "ctx": "543210987654/GB82MIDL40051584623467 :60F:CAD :61:/62JANE SMITH/456 ELM STREET/NEW YORK/NY/10",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "London",
+  "ctx": "8 Canada  Consignee: DEF Industries 456 Park Lane London, SW1A 1AA United Kingdom  Ves",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "USA",
+  "ctx": " City: Anytown State: CA Zip Code: 12345 Country: USA  Carrier: ABC Transport Inc. ",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Brigitte",
+  "ctx": "am:  1. Brigitte Berthelot-Nguyen, Founder & CEO: Brigitte has extensive experience in p",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "CANADA",
+  "ctx": "he order of messages 44 - SenderCompID (44=RZKFX\\_CANADA) - unique identifier for the ",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "JJWALLER",
+  "ctx": "n (represented as the second name initial 'J' in 'JJWALLER' in field 23B) - name: Jeffre",
+  "personal": true
+ },
+ {
+  "label": "SWIFT",
+  "value": "OOFFUS3LXXX",
+  "ctx": ":20:OOFFUS3LXXX :25:20220622 :28C:5248735B12U",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "456 Elm Street",
+  "ctx": " and personal training services. The franchise at 456 Elm Street was established in 2020 and h",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "CUPERTINO",
+  "ctx": "20331:59A:/CRUSD100.00,1.3500,USD,APPLE STORE INC,CUPERTINO,CA,95014,52,220331:53B:/CNJPY",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "The Payments Team",
+  "ctx": "eam.  Thank you for your business.  Best regards, The Payments Team",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "NEW YORK",
+  "ctx": ":53A:/CNJPY200000,81.2500,JPY,JPMORGAN CHASE BANK,NEW YORK,NY,607105,52,220331:57A:/CRCA",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Northeast",
+  "ctx": "\"2022-01-07\",\"Northeast\",\"28\",\"1.1\" \"2022-01-08\",\"Northeast\",\"22\",\"1.5\" \"2022-01-09\",\"Nor",
+  "personal": false
+ },
+ {
+  "label": "SSN",
+  "value": "987-65-4321",
+  "ctx": " \"Jane\",\"Doe\",\"janedoe@email.com\",\"987-654-3210\",\"987-65-4321\",\"0987654321098765\",\"04/24\",\"",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Anytown",
+  "ctx": "email to:  Smith & Jones Law Firm 123 Main Street Anytown, US (123) 456-789",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": "n, the parties hereto agree as follows:  1. LOAN. Lender agrees to loan to Borrower th",
+  "personal": false
+ },
+ {
+  "label": "SWIFT",
+  "value": "ABCDUS33",
+  "ctx": "SD/ABCDUS33/OLBKUS33 } { swift.m.body.9: :59:/SHA/ABCDUS33/OLBKUS33/220922143623 } { swi",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "USA",
+  "ctx": "7B:/DOCUMENTARY CREDIT NO. 123456} {39B:/ABC BANK/USA} {44B:U} {47B:/XYZ CORP/UK} {",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Transferring",
+  "ctx": "ll mean all rights, duties and obligations of the Transferring Party under the ISDA Master A",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Anytown",
+  "ctx": ") Port of Loading: Anytown, CA Port of Discharge: Anytown, CA  Description of Goods: Co",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": " of $500,000 (the \"Loan Amount\") from Lender, and Lender is willing to advance the Loa",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "United States",
+  "ctx": "\",\"Automobiles\",\"1567\",\"187\",\"199000\",\"Dearborn\",\"United States\" \"12\",\"Glencore plc\",\"Commodi",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "USA",
+  "ctx": " {59:/ABC BANK/USA} {71A:20220222} {77B:/ABC BANK/USA} {78:/XYZ CORP/UK} {79A:20220",
+  "personal": false
+ },
+ {
+  "label": "PHONE",
+  "value": "555-123-4567",
+  "ctx": "en@email.com) Phone: [555-123-4567](ntouch://call/555-123-4567)  Start-up Business Informati",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "62DAVID",
+  "ctx": "LZZTCSOM0000001234 :28C:0/010922CAMAGNBCPLZZ :61:/62DAVID LEE/123 MAIN STREET/LOS ANGEL",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Antonina",
+  "ctx": "21.  - 2022-03-14 10:01:18 (John Doe): Thank you, Antonina. I see that you're using the ",
+  "personal": true
+ },
+ {
+  "label": "PHONE",
+  "value": "789-012-3456",
+  "ctx": "5\" \"Alice\",\"Williams\",\"alicewilliams@email.note\",\"789-012-3456\",\"789-43-2109\",\"9876543210987",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "London",
+  "ctx": "244.  Address for Correspondence: Eberthstr. 112, London, NW1 2RT, United Kingdom  Ple",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Consultant",
+  "ctx": " immediately upon written notice to Consultant if Consultant breaches any material term or",
+  "personal": false
+ },
+ {
+  "label": "BANK_ACCOUNT",
+  "value": "12345678",
+  "ctx": "a Mary Davies Sort Code: 12-34-56 Account Number: 12345678  Collateral: As part of this ",
+  "personal": true
+ },
+ {
+  "label": "PHONE",
+  "value": "(123) 456-7890",
+  "ctx": "act: Jane Smith, (123) 456-7890 * Work Telephone: (123) 456-7890  **Loan Information*  * Loan ",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "USA",
+  "ctx": "ilable by sight drafts.} {57A:/USA} {59:/ABC BANK/USA} {71A:20220222} {77B:/ABC BAN",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Antonina",
+  "ctx": "esponses: - 2022-03-14 10:00:35 (John Doe): Hello Antonina, I'm sorry to hear that you'r",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "789 ANYWHERE STREET",
+  "ctx": "15/AMOUNT:70000.00/CURRENCY:USD :23G:/59/XYZ BANK/789 ANYWHERE STREET/TORONTO/ON",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Alex",
+  "ctx": "stable.  Agent: Thank you for trying those steps, Alex. Let's proceed with the next ",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "9\nBeginString",
+  "ctx": "stination=TradeRecon  [Message] Type=AD ApplVerID=9 BeginString=FIX.4.4 BodyLength=352 CheckS",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Transferring",
+  "ctx": "nd conditions of this Agreement, each Party (the \"Transferring Party\") hereby transfers and ",
+  "personal": false
+ },
+ {
+  "label": "SSN",
+  "value": "789-43-2109",
+  "ctx": "liams\",\"alicewilliams@email.note\",\"789-012-3456\",\"789-43-2109\",\"9876543210987654\",\"10/26\",\"",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Northeast",
+  "ctx": "\" \"2022-01-03\",\"Northeast\",\"35\",\"0\" \"2022-01-04\",\"Northeast\",\"30\",\"0.3\" \"2022-01-05\",\"Nor",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "1315 Kerr Valley, Apt.  Governance",
+  "ctx": "Conclusion  These Corporate Govern Street_address 1315 Kerr Valley, Apt.  Governance Guidelines reflect [Company N",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Toronto",
+  "ctx": "hn Doe Street Address: 345 King Street East City: Toronto Province: ON Postal Code: M5A",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "000\n\nReal Estate",
+  "ctx": "le: Senior Software Engineer  Annual Income: $120,000  Real Estate Loan Information:  Property A",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Anytown",
+  "ctx": "  Vessel: N/A (Inland Transport) Port of Loading: Anytown, CA Port of Discharge: Anytow",
+  "personal": false
+ },
+ {
+  "label": "IP",
+  "value": "192.168.0.10",
+  "ctx": "3/12/2023 | Suspicious Login Attempt Blocked (IP: 192.168.0.10) | - | Account locked, passwo",
+  "personal": true
+ },
+ {
+  "label": "GEO",
+  "value": "0.6235,0.6385",
+  "ctx": "D,GBP,1.3125,1.2955 EUR,GBP,0.8515,0.8695 CAD,GBP,0.6235,0.6385 CHF,GBP,1.2125,1.1955 AUD,GBP",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Alice",
+  "ctx": "\",50,65000,680,\"2021-06-15\",\"125.50\",FALSE 45678,\"Alice\",\"Brown\",\"alicebrown@example.",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Consultant",
+  "ctx": " 3.1 As compensation for the Services rendered by Consultant under this Agreement, Client ",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Mohammed",
+  "ctx": "ponio Camanni-Zichichi Street Address: Studio 61, Mohammed station",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "2022 Freightliner Cascadia\nTrailer",
+  "ctx": " Date: June 23, 1974  Vehicle Information: Truck: 2022 Freightliner Cascadia Trailer: 48ft Refrigerated Trailer Dr",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": "to borrow a principal sum of _______________ from Lender, and Lender is willing to adv",
+  "personal": false
+ },
+ {
+  "label": "PHONE",
+  "value": "+1-800-123-4567",
+  "ctx": " please contact us at support@peerpay.com or call +1-800-123-4567.  Thank you for using PeerPay",
+  "personal": false
+ },
+ {
+  "label": "PHONE",
+  "value": "+44 973 771 5733",
+  "ctx": " payment or to set up Auto Pay, please call us at +44 973 771 5733. You can also pay online at w",
+  "personal": false
+ },
+ {
+  "label": "ROUTING",
+  "value": "121000358",
+  "ctx": " Routing Number: Bank of America, Routing Number: 121000358 * Bank Account Number: 123456",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Madrid, Spain",
+  "ctx": "ersity  75 Glorieta de Cristóbal Espada, Puerta 2 Madrid, Spain noah75@van.com www.van.com",
+  "personal": false
+ },
+ {
+  "label": "EMAIL",
+  "value": "customerservice@securebank.com",
+  "ctx": "ne: 1-888-123-4567 (24/7 Customer Support) Email: customerservice@securebank.com  securebank.com  Note: This S",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Alex",
+  "ctx": "-----------------------------------  Agent: Hello Alex, thank you for contacting Clo",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "JJWALLER",
+  "ctx": "D985000,00 :50K:/CDR/CONFIRM/2234567/USD985000,00/JJWALLER/263 PAUL ESTATES/CITYNAME/STA",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": "2, rue Navarro, and _______________ (hereinafter \"Lender\").  WHEREAS, Borrower is the ",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "Lender",
+  "ctx": "d, the parties agree as follows:  1. LOAN AMOUNT. Lender shall make a loan to Borrower",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "123 Main Street",
+  "ctx": "da DATE OF ISSUE: 01/10/2023  SHIPPER: Acme Corp. 123 Main Street Toronto, ON M5J 1E3 Canada  C",
+  "personal": false
+ },
+ {
+  "label": "PERSON",
+  "value": "JJWALLER",
+  "ctx": "WALLER/263 PAUL ESTATES/CITYNAME/STATE123/US :57A:JJWALLER :59:/CITYNAME/STATE123/US  In",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Olivia\nLast Name",
+  "ctx": "ion: 08/15/2022  Patient Information: First Name: Olivia Last Name: Smith Date of Birth: 03/22/1",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Mountain View",
+  "ctx": " Address Line 1: 09448 Adam Plaza, Apt. 261 City: Mountain View State: CA Zip Code: 94043 Cou",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Ángel Palmer",
+  "ctx": ":C:/STUDENT :62F/HERNDANDEZ61/1234567890/GENoveva Ángel Palmer :63F/USD :72:/1500.00 :73:/-6",
+  "personal": true
+ },
+ {
+  "label": "SECRET",
+  "value": "currently",
+  "ctx": "atent has a commercial value of $3 million and is currently licensed to TechCorp Ltd. for",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "United Kingdom",
+  "ctx": "IGNEE: Global Inc. 456 Park Lane London, EC2A 1AA United Kingdom  NOTIFY PARTY: (If different ",
+  "personal": false
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Canada",
+  "ctx": "is subject to the Carriage of Goods by Sea Act of Canada. ",
+  "personal": false
+ },
+ {
+  "label": "PHONE",
+  "value": "(123) 456-7890",
+  "ctx": "Security Number: 123-45-6789 * Contact Telephone: (123) 456-7890 * Email Address: [john.smith@",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Mastering",
+  "ctx": "hat you'll learn during this exclusive event:  1. Mastering the latest data science tools",
+  "personal": false
+ },
+ {
+  "label": "EMAIL",
+  "value": "agustina.salinas-acosta@example.com",
+  "ctx": "l and enter the recipient's email address (e.g., [agustina.salinas-acosta@example.com](mailto:agustina.salinas-acos",
+  "personal": true
+ },
+ {
+  "label": "SSN",
+  "value": "456-65-7890",
+  "ctx": ",\"Johnson\",\"bobjohnson@email.com\",\"456-789-0123\",\"456-65-7890\",\"8765432101234567\",\"08/25\",\"",
+  "personal": true
+ },
+ {
+  "label": "ADDRESS",
+  "value": "Offering",
+  "ctx": " first refusal by the Remaining Shareholders, the Offering Shareholder shall sell the Of",
+  "personal": false
+ },
+ {
+  "label": "PHONE",
+  "value": "(123) 456-7890",
+  "ctx": " years * Supervisor Name and Contact: Jane Smith, (123) 456-7890 * Work Telephone: (123) 456-7",
+  "personal": true
+ },
+ {
+  "label": "PERSON",
+  "value": "Underlying Asset",
+  "ctx": "            <subProductType>                <name>Underlying Asset: Apple Inc. Common Stock</nam",
+  "personal": false
+ }
+]

@@ -146,6 +146,12 @@ def find_patterns(text: str) -> list[Span]:
 
 
 NER_LABELS = {"PER": "PERSON", "LOC": "ADDRESS", "ORG": "ORG"}
+ROLES = {"lender", "borrower", "consultant", "client", "company", "party", "parties", "licensee", "licensor", "supplier",
+         "buyer", "seller", "tenant", "landlord", "employer", "employee", "contractor", "customer", "vendor", "purchaser",
+         "distributor", "agent", "guarantor", "investor", "manager", "owner", "recipient", "discloser", "provider"}
+COMMON_WORDS = {"during", "monitoring", "mastering", "transferring", "offering", "remaining", "following", "including",
+                "regarding", "pursuant", "notwithstanding", "subject", "provided", "section", "article", "schedule",
+                "exhibit", "annex", "appendix", "currently", "northeast", "northwest", "southeast", "southwest"}
 # "en": English-only BERT (MIT). "multi": XLM-RoBERTa for de/en/es/fr/it/nl/pt and
 # others (AFL-3.0), slower.
 NER_MODELS = {"en": "dslim/bert-base-NER", "multi": "Davlan/xlm-roberta-base-ner-hrl"}
@@ -183,6 +189,13 @@ def find_entities(text: str, min_score: float = 0.6, chunk: int = 1500, model: s
             # A place name alone ("London", "USA") is not personal data; keep a
             # place only when it is part of a street address (a number nearby).
             if label == "ADDRESS" and not re.search(r"\d", text[max(0, st - 12): en + 12]):
+                continue
+            word = text[st:en]
+            # Contract roles ("Lender", "the Consultant") and single ordinary
+            # words the model tags at the start of a sentence are not names.
+            if label == "PERSON" and word.lower() in ROLES:
+                continue
+            if label == "ADDRESS" and " " not in word and not re.search(r"\d", word) and word.lower() in COMMON_WORDS:
                 continue
             out.append(Span(st, en, label, "ner"))
         if base + chunk >= len(text):

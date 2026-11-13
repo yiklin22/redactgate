@@ -96,11 +96,18 @@ What the numbers mean:
   least one labelled value left in. Use it to cut how much personal data
   leaves, with a person reading the redacted text before it is sent (the
   page shows it for that reason), not as a guarantee.
-- **Precision is a lower bound.** The dataset's labels are incomplete: many
-  names, emails and addresses in the documents are not labelled. A sample of
-  150 dev documents showed most "false positives" were real emails and names
-  the labels missed; the rest were mostly short fragments and message-format
-  syntax, which I then filtered.
+- **Precision is a lower bound, and the real figure is higher.** The labels
+  are incomplete. I audited 100 random masks (from 300 English test
+  documents) that touch no labelled value: 50 were real personal data the
+  labels missed (names in chat transcripts, phone numbers, SSNs in CSV rows,
+  account numbers), 50 were not (city/country names in company addresses,
+  role words like "Lender", capitalised ordinary words, numbers in tables).
+  Such masks are 24% of masked characters, so about 12% of masked characters
+  are false positives: **estimated precision about 88%**. One annotator (me),
+  100 items: treat it as a rough estimate. The audit is in
+  `docs/precision-audit.json`. Afterwards, role words and a short list of
+  ordinary words were filtered from the model's output (English dev: recall
+  unchanged at 84.0%, lower bound 64.9% -> 65.8%).
 - **Synthetic data.** Card and routing numbers in the dataset often fail
   their checksums, so the tool also accepts them when a label word ("card",
   "routing number") is next to them. Real documents may behave differently.
