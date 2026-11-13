@@ -21,6 +21,13 @@ of its characters are covered.
 | Microsoft Presidio 2.2.366, default config | 52.7% (4322/8205) | 64.4% | 29.1% |
 | redactgate, hand audit of 100 masks (earlier version, English test documents) | | | about 88% (estimate) |
 
+Test figures for "this version" are for commit `354a317`. A code review after
+the test run found ordinary text the new address patterns masked ("Launchpad 3",
+"Version 2 Canale Today", a signature line after an address); the fixes were
+measured on dev only and the test split was not run again. On dev they cost
+0 to 2 addresses per language (-0.0 to -0.4 points); see
+[docs/leak-analysis.md](docs/leak-analysis.md).
+
 | test split (about 450 documents each) | values masked, previous -> **this version** | documents with any leak | precision (lower bound) |
 |---|---|---|---|
 | German | 67.8% -> **72.8%** (839/1152) | 43.5% -> 37.5% | 63.1% -> 64.0% |
@@ -239,6 +246,17 @@ names the model tags as companies, was tried and dropped: it lowered the
 precision lower bound on every dev split. Other groups are labelled template
 placeholders ("[Your Name]"), names in CSV cells, and ID numbers with no label
 word next to them.
+
+**Review fixes after the test run (dev only).** The line after a street is
+now only taken when it carries a postcode or a two-letter code (or a postcode
+line follows), and the last line only when it is a country; "-pad" and "vial"
+were removed from the street types; a number after a capitalised word
+("Section 4 Borgo") no longer starts a street-type-first address. Dev, values
+masked: English 86.9% -> 86.8%, German 74.0% -> 74.0%, French 74.5% -> 74.2%,
+Spanish 71.3% -> 70.9%, Italian 75.2% -> 74.9%, Dutch 69.6% -> 69.2%; the
+precision lower bound stayed level or rose by up to 0.2 points. The values
+lost are real addresses of those forms ("Matthijspad 658", "76 Vial Albina
+Gallart"); the test figures above were measured before these fixes.
 
 **Against Presidio.** Out of the box, Presidio masks about as many names (72%
 vs 74% for the English-model setup) but far fewer street addresses (12% vs

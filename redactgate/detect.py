@@ -63,22 +63,27 @@ CAP = r"[A-ZÀ-ÖØ-ÞĀ-Ž][^\W\d_]*(?:['-][^\W\d_]+)*"
 # Street types written before the name (Rue de la Paix, Via Roma, Calle Mayor).
 STREET_FIRST = (r"(?i:rue|avenue|boulevard|bd|chemin|allée|place|impasse|quai|route|calle|c/|avenida|avda\.?|camino|"
                 r"pasaje|paseo|plaza|carrera|carrer|ronda|travesía|via|viale|piazza|corso|largo|strada|vicolo|contrada|rua|"
-                r"acceso|alameda|bajada|callejón|cañada|carretera|cuesta|glorieta|pasadizo|rambla|urbanización|vial|vía|"
+                r"acceso|alameda|bajada|callejón|cañada|carretera|cuesta|glorieta|pasadizo|rambla|urbanización|vía|"
                 r"borgo|canale|incrocio|piazzale|rotonda|salita|stretto)")
 # Street types joined to the end of the name (Schnellstraße, Kayleighstraat, Åkervägen).
 STREET_SUFFIX = (r"(?:straße|strasse|str\.|gasse|weg|ring|platz|allee|damm|ufer|steeg|straat|laan|gracht|plein|kade|"
-                 r"singel|dreef|vägen|gatan|väg|gata|stigen|stig|pad|baan|boulevard|torget|torg|gränd)")
+                 r"singel|dreef|vägen|gatan|väg|gata|stigen|stig|baan|boulevard|torget|torg|gränd)")
 # One word ending in a street type ("Roggestr.", "Annerose-Kühnert-Platz",
 # "Kvarntorget"), with a house number before or after it (not a year), so that
 # ordinary words such as "Spring" are not taken for a street.
-SUFFIX_STREET = r"[A-ZÀ-ÖØ-ÞĀ-Ž](?:[^\W\d_]|-(?=[^\W\d_]))*?(?i:" + STREET_SUFFIX + r")(?:\b|(?<=\.))"
+SUFFIX_STREET = r"\b[A-ZÀ-ÖØ-ÞĀ-Ž](?:[^\W\d_]|-(?=[^\W\d_])){0,40}?(?i:" + STREET_SUFFIX + r")(?:\b|(?<=\.))"
 HOUSE_NO = r"(?!(?:19|20)\d\d\b)\d{1,4}[a-z]?(?:/\d+)?\b"
 # A postal address written over several lines: "123 Main Street" / "Toronto, ON M5J 1K1" / "Canada".
+# The city line must carry a postcode or a two-letter code (state, country), or
+# be followed by a postcode line; the last line may be a country.
 _W = CAP + r"(?:[ \t]+" + CAP + r"){0,2}"
+_COUNTRY = (r"(?:USA|US|UK|U\.S\.A?\.|United States(?: of America)?|United Kingdom|Canada|Australia|Ireland|"
+            r"Germany|Deutschland|France|Spain|España|Italy|Italia|Netherlands|Nederland|Belgium|Sweden|Switzerland)")
 _POST = (r"(?:[A-Z]{2}[ \t]+\d{5}(?:-\d{4})?|[A-Z]{2}[ \t]+[A-Z]\d[A-Z][ \t]?\d[A-Z]\d|[A-Z]\d[A-Z][ \t]?\d[A-Z]\d|"
          r"[A-Z]{1,2}\d[A-Z\d]?[ \t]?\d[A-Z]{2}|\d{4}[ \t]?[A-Z]{2}|\d{4,6})")
-LINE_TAIL = (r"(?:\n[ \t]*" + _W + r",[ \t]*(?:" + _POST + r"|[A-Z]{2}|" + _W + r")(?:,[ \t]*(?:" + _POST + r"|" + _W + r"))*"
-             r"(?:\n[ \t]*" + _POST + r"(?=[ \t]*(?:\n|$)))?(?:\n[ \t]*" + _W + r"(?=[ \t]*(?:\n|$)))?)?")
+LINE_TAIL = (r"(?:\n[ \t]*" + _W + r",[ \t]*(?:(?:" + _POST + r"|[A-Z]{2})\b(?:,[ \t]*(?:" + _POST + r"|[A-Z]{2}|" + _COUNTRY + r")\b)*"
+             r"(?:\n[ \t]*" + _POST + r"(?=[ \t]*(?:\n|$)))?|" + _W + r"\n[ \t]*" + _POST + r"(?=[ \t]*(?:\n|$)))"
+             r"(?:\n[ \t]*" + _COUNTRY + r"(?=[ \t]*(?:\n|$)))?)?")
 ADDR_TAIL = (r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{4}\s?[A-Z]{2}(?:\s+" + CAP + r")?|\d{5}(?:\s+" + CAP + r")?)"
              r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6}(?:\s+" + CAP + r")?)){0,4}")
 
@@ -138,8 +143,10 @@ PATTERNS = [
     ("SECRET", re.compile(r"(?<![\w@])[^\s\"'<>()\[\]{},;]{10,40}(?![\w])"),
      lambda m: sum(bool(re.search(rx, m.group())) for rx in (r"[a-z]", r"[A-Z]", r"\d", r"[^\w\s]")) >= 4
      and not re.search(r"https?:|www\.|@|\.(?:com|org|net)\b|^\$|[.,:]$|[:/|=]|^\(|\d{5}|-\d{4}", m.group()), 0),
+    # Not after a capitalised word ("Version 2 Canale Today", "Section 4 Borgo Notes").
     ("ADDRESS", re.compile(r"\b\d{1,5}[a-z]?,?\s+" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
-                           + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),
+                           + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL),
+     lambda m: not re.search(r"(?:^|[^\w])[A-ZÀ-ÖØ-Þ][^\W\d_]*[ \t]+$", m.string[max(0, m.start() - 40):m.start()]), 0),
     ("ADDRESS", re.compile(r"\b" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
                            + CAP + r"(?:\s+" + CAP + r"){0,3},?\s+\d{1,5}[a-z]?\b"
                            r"(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),

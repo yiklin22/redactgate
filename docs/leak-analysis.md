@@ -48,6 +48,32 @@ next to it (not a year), which it did not before.
 Leaking dev documents: 553 -> 481. Pattern matching costs 1.12 ms per
 document instead of 1.03 ms.
 
+## Change 1, review fixes (after the test run, dev only)
+
+A code review found ordinary text that change 1 masked: "Launchpad 3",
+"Needs 3 Vial Samples", "Version 2 Canale Today", and a line such as
+"Thanks, Anna" after a street line. Fixes: the line after a street is taken
+only when it carries a postcode or a two-letter code (or a postcode line
+follows), and the last line only when it is a country; "-pad" and "vial" were
+removed; a number right after a capitalised word does not start a
+street-type-first address; the suffix word is limited to 40 letters (a long
+hyphenated word took seconds to scan).
+
+| dev split | values masked, change 1 -> with fixes | docs with any leak | precision lower bound |
+|---|---|---|---|
+| English | 86.9% -> 86.8% | 20.0% -> 20.2% | 65.5% -> 65.7% |
+| German | 74.0% -> 74.0% | 38.0% -> 38.0% | 61.6% -> 61.7% |
+| French | 74.5% -> 74.2% | 36.0% -> 36.5% | 74.9% -> 74.9% |
+| Spanish | 71.3% -> 70.9% | 41.0% -> 42.0% | 64.6% -> 64.6% |
+| Italian | 75.2% -> 74.9% | 37.5% -> 38.5% | 74.1% -> 74.1% |
+| Dutch | 69.6% -> 69.2% | 38.0% -> 39.0% | 61.6% -> 61.7% |
+
+The values lost are real addresses of the removed forms ("Matthijspad 658",
+"Amypad 32", "76 Vial Albina Gallart", "Via 3 rue de Bazin, Italia"). The
+false positives the fixes remove are mostly absent from the labelled data, so
+the precision lower bound barely moves. The test split was run once, before
+these fixes, and was not run again.
+
 ## Change 2 (tried, not kept): names tagged as organisations
 
 The model tags some full names as ORG ("Manon Legros", "TRACI V. LEE"),

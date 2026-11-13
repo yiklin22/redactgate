@@ -79,3 +79,13 @@ def test_more_street_forms_and_multiline_addresses():
         assert item in found, item
     # A word that merely ends in a street type, with no house number, is not an address.
     assert labels("In Spring we reviewed the Boxing ring budget. Spring 2023 was good.") == set()
+
+
+def test_address_patterns_leave_ordinary_text_alone():
+    # Street-type words after a heading or count, and words ending in "pad".
+    assert labels("Version 2 Canale Today. Section 4 Borgo Notes. Launchpad 3 is live. Needs 3 Vial Samples.") == set()
+    # The line after a street is only taken when it looks like a city/postcode line.
+    for text in ["Invoice: 10 Oak Street\nTotal, Tax, Net\nThanks", "Pay 12 Main Street\nThanks, Anna",
+                 "Ship to 123 Main Street\nAnytown, CA 12345\nThank you"]:
+        found = {v for k, v in labels(text) if k == "ADDRESS"}
+        assert not any(w in v for v in found for w in ("Net", "Anna", "Thank")), found
