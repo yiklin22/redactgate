@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>redactgate</title>
+<style>
+  :root { --ink:#1b1f24; --muted:#5b6470; --line:#d8dde3; --bg:#fbfbfa; --tag:#fff1b8; --tag-ink:#5a4700; --accent:#1f5fbf; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#e8eaed; --muted:#9aa3ad; --line:#3a4048; --bg:#16191d; --tag:#4a3f10; --tag-ink:#ffe48a; --accent:#7fb0ff; } }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; } p.lede { color: var(--muted); margin: 0 0 20px; }
+  textarea { width: 100%; box-sizing: border-box; min-height: 180px; font: 14px/1.45 ui-monospace, monospace;
+             color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+  button { font: inherit; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  label { color: var(--muted); }
+  .row { display: flex; gap: 12px; align-items: center; margin: 10px 0 24px; flex-wrap: wrap; }
+  pre { white-space: pre-wrap; word-break: break-word; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font: 14px/1.45 ui-monospace, monospace; }
+  mark { background: var(--tag); color: var(--tag-ink); border-radius: 3px; padding: 0 2px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; } td, th { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+  h2 { font-size: 1.1rem; margin: 28px 0 8px; } .muted { color: var(--muted); font-size: 14px; }
+</style></head>
+<body><main>
+<h1>redactgate</h1>
+<p class="lede">Take personal data out of text before it goes to an AI model, then put it back into the answer.
+Everything runs on this machine.</p>
+<form method="post" action="/">
+  <textarea name="text" placeholder="Paste an email, contract or support ticket">{{ text }}</textarea>
+  <div class="row">
+    <label><input type="checkbox" name="use_model" value="1" {% if use_model is not defined or use_model %}checked{% endif %}> Use the name and place model (slower, finds names)</label>
+    <button type="submit">Redact</button>
+  </div>
+</form>
+{% if redacted or restored %}
+<h2>Safe to send</h2>
+<p class="muted">Copy this into the AI tool. Each value has a placeholder; the same value always gets the same one.</p>
+<pre id="red">{{ redacted }}</pre>
+{% if counts %}<p class="muted">Masked: {% for k, n in counts %}{{ n }} {{ k|lower }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
+<h2>Put the values back</h2>
+<form method="post" action="/">
+  <input type="hidden" name="text" value="{{ text }}">
+  <input type="hidden" name="redacted" value="{{ redacted }}">
+  <input type="hidden" name="mapping_json" value="{{ mapping_json }}">
+  <textarea name="reply" placeholder="Paste the AI's answer that uses the placeholders">{{ reply or "" }}</textarea>
+  <div class="row"><button type="submit">Restore</button></div>
+</form>
+{% if restored %}<pre>{{ restored }}</pre>{% endif %}
+{% if mapping %}
+<h2>Mapping (stays here)</h2>
+<table><tr><th>placeholder</th><th>original</th></tr>
+{% for k, v in mapping.items() %}<tr><td><mark>{{ k }}</mark></td><td>{{ v }}</td></tr>{% endfor %}
+</table>
+{% endif %}
+{% endif %}
+</main></body></html>
