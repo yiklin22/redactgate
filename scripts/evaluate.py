@@ -18,7 +18,7 @@ from pathlib import Path
 import pyarrow.parquet as pq
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from redactgate.detect import detect  # noqa: E402
+from redactgate.detect import Span, detect  # noqa: E402
 from redactgate.redact import PERSONAL  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +30,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--no-model", action="store_true")
+    ap.add_argument("--detector", choices=["redactgate", "presidio"], default="redactgate",
+                    help="presidio: Microsoft Presidio's default analyzer (run from a venv that has it)")
     ap.add_argument("--split", choices=["dev", "test"], default="dev",
                     help="dev = first 500 documents of the train split (for tuning); test = the test split")
     a = ap.parse_args()
@@ -40,6 +42,9 @@ def main():
     if a.limit:
         rows = rows[: a.limit]
     labels = PERSONAL | {"ORG"}
+    if a.detector == "presidio":
+        from presidio_analyzer import AnalyzerEngine
+        presidio = AnalyzerEngine()
     per = collections.defaultdict(lambda: [0, 0])  # label -> [masked, total]
     chars_gold = chars_hit = pred_chars = pred_in_gold = 0
     docs_leak = 0
@@ -48,8 +53,12 @@ def main():
     for r in rows:
         text = r["generated_text"]
         gold = json.loads(r["pii_spans"]) if isinstance(r["pii_spans"], str) else r["pii_spans"]
-        spans = detect(text, use_model=not a.no_model, labels=labels)
-        personal_spans = [s for s in spans if s.label in PERSONAL]
+        if a.detector == "presidio":
+            spans = [Span(r.start, r.end, r.entity_type, "presidio") for r in presidio.analyze(text=text, language="en")]
+            personal_spans = spans  # Presidio's anonymizer masks everything it detects
+        else:
+            spans = detect(text, use_model=not a.no_model, labels=labels)
+            personal_spans = [s for s in spans if s.label in PERSONAL]
         covered = bytearray(len(text))
         for s in personal_spans:
             covered[s.start:s.end] = b"\x01" * (s.end - s.start)
@@ -80,7 +89,7 @@ def main():
     personal = {k: v for k, v in per.items() if k not in NOT_PERSONAL}
     caught = sum(v[0] for v in personal.values())
     total = sum(v[1] for v in personal.values())
-    method = "patterns only" if a.no_model else "patterns + NER model"
+    method = "Microsoft Presidio, default analyzer" if a.detector == "presidio" else ("patterns only" if a.no_model else "patterns + NER model")
     lines = [f"# redactgate on Gretel synthetic_pii_finance_multilingual, {a.split} ({len(rows)} documents, {method})", "",
              f"- Personal-data spans masked (>=80% of characters): **{caught}/{total} = {caught / total:.1%}**",
              f"- Characters of personal data masked: {chars_hit}/{chars_gold} = {chars_hit / chars_gold:.1%}",
@@ -93,7 +102,7 @@ def main():
         lines.append(f"| {k}{note} | {h} | {n} | {h / n:.0%} |")
     out = "\n".join(lines) + "\n"
     print(out)
-    tag = f"{a.split}-" + ("patterns" if a.no_model else "model")
+    tag = f"{a.split}-" + ("presidio" if a.detector == "presidio" else "patterns" if a.no_model else "model")
     if not a.limit:
         (ROOT / f"docs/results-{tag}.md").write_text(out)
     (ROOT / ".cache").mkdir(exist_ok=True)

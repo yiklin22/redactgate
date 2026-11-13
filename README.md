@@ -44,12 +44,22 @@ covered.
 | dev (500) | patterns + model | 79.3% (1118/1409) | 85.6% | 32.2% | 66.6% |
 | test (2,891) | patterns only | 55.0% (4516/8205) | 63.3% | 58.0% | 65.1% |
 | test (2,891) | **patterns + model** | **76.0% (6239/8205)** | **83.0%** | **37.0%** | 65.6% |
+| test (2,891) | Microsoft Presidio 2.2 (analyzer 3.8, default config, spaCy `en_core_web_lg`) | 52.7% (4322/8205) | 62.0% | 64.4% | 29.1% |
 
 Per type on test (patterns + model): names 74%, street addresses 82%,
 emails 93%, phone numbers 86%, card numbers 93%, IBANs 97%, SWIFT 100%, IPs
 98-100%; weakest are passwords (43%), API keys (39%), customer and employee
 IDs (38-41%), and routing numbers (43%). Full table: `docs/results-test-model.md`.
 Speed: 152 ms per document on CPU with the model, 1 ms without.
+
+**Against Presidio.** Out of the box, Presidio masks about as many names (72%
+vs 74%) but far fewer street addresses (12% vs 82%), SWIFT codes, passwords
+and bank account numbers. Its precision lower bound is lower because by
+default it also masks every date, time, city and country. It is faster
+(27 ms vs 152 ms per document). This compares defaults: Presidio is built to
+take custom recognizers, and adding address and banking ones would close much
+of the gap. Run: `python scripts/evaluate.py --split test --detector presidio`
+from a venv with `presidio-analyzer` and `en_core_web_lg`.
 
 What the numbers mean:
 
@@ -104,6 +114,4 @@ python scripts/evaluate.py --split test         # run once
 - English only. The dataset has Dutch, French, German, Italian, Spanish and
   Swedish splits that were not tried.
 - No PDF or Word input; text only.
-- Prior art: Microsoft Presidio does the same job with more recognizers; this
-  is a smaller version with its own measurement. Comparing the two on the
-  same test split would be the honest next step.
+- Presidio with custom recognizers was not tried; only its defaults.
