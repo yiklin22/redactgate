@@ -68,3 +68,14 @@ def test_keyed_secrets_and_ids():
         assert item in found, item
     # CamelCase field names and ordinary words after "user" are left alone.
     assert labels("<StatementBeginBalance>1200</StatementBeginBalance> The user workstation was updated.") == set()
+
+
+def test_more_street_forms_and_multiline_addresses():
+    found = labels("Ship to 25 Old Street\n  London, EC4A 3EG\n  UK\n\nThen Roggestr. 5/5, 20095 Hamburg; "
+                   "7 Cuesta Rico Agudo, Las Palmas and 12 Rue de l'Espoir, 75010 Paris. Atelier: Skogstorget 608.")
+    for item in [("ADDRESS", "25 Old Street\n  London, EC4A 3EG\n  UK"), ("ADDRESS", "Roggestr. 5/5, 20095 Hamburg"),
+                 ("ADDRESS", "7 Cuesta Rico Agudo, Las Palmas"), ("ADDRESS", "12 Rue de l'Espoir, 75010 Paris"),
+                 ("ADDRESS", "Skogstorget 608")]:
+        assert item in found, item
+    # A word that merely ends in a street type, with no house number, is not an address.
+    assert labels("In Spring we reviewed the Boxing ring budget. Spring 2023 was good.") == set()

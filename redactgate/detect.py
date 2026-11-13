@@ -62,10 +62,23 @@ STREET = (r"(?i:alley|annex|arcade|avenue|ave|bayoo|beach|bend|bluffs?|bottoms?|
 CAP = r"[A-ZÀ-ÖØ-ÞĀ-Ž][^\W\d_]*(?:['-][^\W\d_]+)*"
 # Street types written before the name (Rue de la Paix, Via Roma, Calle Mayor).
 STREET_FIRST = (r"(?i:rue|avenue|boulevard|bd|chemin|allée|place|impasse|quai|route|calle|c/|avenida|avda\.?|camino|"
-                r"pasaje|paseo|plaza|carrera|carrer|ronda|travesía|via|viale|piazza|corso|largo|strada|vicolo|contrada|rua)")
+                r"pasaje|paseo|plaza|carrera|carrer|ronda|travesía|via|viale|piazza|corso|largo|strada|vicolo|contrada|rua|"
+                r"acceso|alameda|bajada|callejón|cañada|carretera|cuesta|glorieta|pasadizo|rambla|urbanización|vial|vía|"
+                r"borgo|canale|incrocio|piazzale|rotonda|salita|stretto)")
 # Street types joined to the end of the name (Schnellstraße, Kayleighstraat, Åkervägen).
 STREET_SUFFIX = (r"(?:straße|strasse|str\.|gasse|weg|ring|platz|allee|damm|ufer|steeg|straat|laan|gracht|plein|kade|"
-                 r"singel|dreef|vägen|gatan|väg|gata|stig)")
+                 r"singel|dreef|vägen|gatan|väg|gata|stigen|stig|pad|baan|boulevard|torget|torg|gränd)")
+# One word ending in a street type ("Roggestr.", "Annerose-Kühnert-Platz",
+# "Kvarntorget"), with a house number before or after it (not a year), so that
+# ordinary words such as "Spring" are not taken for a street.
+SUFFIX_STREET = r"[A-ZÀ-ÖØ-ÞĀ-Ž](?:[^\W\d_]|-(?=[^\W\d_]))*?(?i:" + STREET_SUFFIX + r")(?:\b|(?<=\.))"
+HOUSE_NO = r"(?!(?:19|20)\d\d\b)\d{1,4}[a-z]?(?:/\d+)?\b"
+# A postal address written over several lines: "123 Main Street" / "Toronto, ON M5J 1K1" / "Canada".
+_W = CAP + r"(?:[ \t]+" + CAP + r"){0,2}"
+_POST = (r"(?:[A-Z]{2}[ \t]+\d{5}(?:-\d{4})?|[A-Z]{2}[ \t]+[A-Z]\d[A-Z][ \t]?\d[A-Z]\d|[A-Z]\d[A-Z][ \t]?\d[A-Z]\d|"
+         r"[A-Z]{1,2}\d[A-Z\d]?[ \t]?\d[A-Z]{2}|\d{4}[ \t]?[A-Z]{2}|\d{4,6})")
+LINE_TAIL = (r"(?:\n[ \t]*" + _W + r",[ \t]*(?:" + _POST + r"|[A-Z]{2}|" + _W + r")(?:,[ \t]*(?:" + _POST + r"|" + _W + r"))*"
+             r"(?:\n[ \t]*" + _POST + r"(?=[ \t]*(?:\n|$)))?(?:\n[ \t]*" + _W + r"(?=[ \t]*(?:\n|$)))?)?")
 ADDR_TAIL = (r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{4}\s?[A-Z]{2}(?:\s+" + CAP + r")?|\d{5}(?:\s+" + CAP + r")?)"
              r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6}(?:\s+" + CAP + r")?)){0,4}")
 
@@ -125,18 +138,19 @@ PATTERNS = [
     ("SECRET", re.compile(r"(?<![\w@])[^\s\"'<>()\[\]{},;]{10,40}(?![\w])"),
      lambda m: sum(bool(re.search(rx, m.group())) for rx in (r"[a-z]", r"[A-Z]", r"\d", r"[^\w\s]")) >= 4
      and not re.search(r"https?:|www\.|@|\.(?:com|org|net)\b|^\$|[.,:]$|[:/|=]|^\(|\d{5}|-\d{4}", m.group()), 0),
-    ("ADDRESS", re.compile(r"\b\d{1,5}[a-z]?,?\s+" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d')\s*)*"
-                           + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|étage)\.?\s*#?\w+)?" + ADDR_TAIL), None, 0),
-    ("ADDRESS", re.compile(r"\b" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d')\s*)*"
-                           + CAP + r"(?:\s+" + CAP + r"){0,3},?\s+\d{1,5}[a-z]?\b" + ADDR_TAIL), None, 0),
-    ("ADDRESS", re.compile(r"\b(?:\d{1,5}\s+)?" + r"[A-ZÀ-ÖØ-ÞĀ-Ž][^\W\d_]*" + STREET_SUFFIX + r"\b(?:\s+\d{1,5}[a-z]?(?:/\d+)?)?"
-                           r"(?:,?\s*(?i:apt|apartment|wohnung)\.?\s*#?\w+)?" + ADDR_TAIL), None, 0),
+    ("ADDRESS", re.compile(r"\b\d{1,5}[a-z]?,?\s+" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
+                           + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),
+    ("ADDRESS", re.compile(r"\b" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
+                           + CAP + r"(?:\s+" + CAP + r"){0,3},?\s+\d{1,5}[a-z]?\b"
+                           r"(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),
+    ("ADDRESS", re.compile(r"(?:\b\d{1,5}[a-z]?,?\s+" + SUFFIX_STREET + r"(?:\s+" + HOUSE_NO + r")?|\b" + SUFFIX_STREET + r"\s+" + HOUSE_NO + r")"
+                           r"(?:,?\s*(?i:apt|apartment|wohnung)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),
     ("ADDRESS", re.compile(r"(?:\b\d{1,3}(?:st|nd|rd|th)\s+(?i:floor),\s*)?"
-                           r"\b\d{1,6}\s+(?:" + CAP + r"\s+){1,4}" + STREET + r"\b\.?"
+                           r"\b\d{1,6}\s+(?:" + CAP + r"[ \t]+){1,4}" + STREET + r"\b\.?"
                            r"(?:,?\s*(?i:apt|apartment|suite|unit|ste|floor)\.?\s*#?\w+)?"
                            # then up to four parts: city, state, postcode, country
                            r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{5})"
-                           r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6})){0,4}"), None, 0),
+                           r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6})){0,4}" + LINE_TAIL), None, 0),
     ("PERSON", re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Dr|Prof|M|Mme|Mlle|Monsieur|Madame|Herr|Frau|Sr|Sra|Señor|Señora|Sig|Sig\.ra|Signor|Signora|Dhr|Mevr|Mevrouw)\.?\s+(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){0,3})"), None, 1),
     ("PERSON", re.compile(r"(?i:dear|sincerely|regards|best)\s*,?\s+(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){1,3})"), None, 1),
 ]
