@@ -85,7 +85,13 @@ def test_address_patterns_leave_ordinary_text_alone():
     # Street-type words after a heading or count, and words ending in "pad".
     assert labels("Version 2 Canale Today. Section 4 Borgo Notes. Launchpad 3 is live. Needs 3 Vial Samples.") == set()
     # The line after a street is only taken when it looks like a city/postcode line.
-    for text in ["Invoice: 10 Oak Street\nTotal, Tax, Net\nThanks", "Pay 12 Main Street\nThanks, Anna",
-                 "Ship to 123 Main Street\nAnytown, CA 12345\nThank you"]:
-        found = {v for k, v in labels(text) if k == "ADDRESS"}
-        assert not any(w in v for v in found for w in ("Net", "Anna", "Thank")), found
+    for text, address in [("Invoice: 10 Oak Street\nTotal, Tax, Net\nThanks", "10 Oak Street"),
+                          ("Pay 12 Main Street\nThanks, Anna", "12 Main Street"),
+                          ("Pay 12 Main Street\nThanks, JD", "12 Main Street"),
+                          ("Ship to 123 Main Street\nAnytown, CA 12345\nThank you", "123 Main Street\nAnytown, CA 12345"),
+                          ("Ship to 1 Main Street\nVienna, Austria\n\nThanks", "1 Main Street\nVienna, Austria")]:
+        assert {v for k, v in labels(text) if k == "ADDRESS"} == {address}, text
+
+
+def test_name_before_a_house_number_keeps_the_address():
+    assert ("ADDRESS", "12 rue de Paris, 75001 Paris") in labels("Jean Dupont 12 rue de Paris, 75001 Paris")

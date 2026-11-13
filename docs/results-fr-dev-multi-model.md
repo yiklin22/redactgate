@@ -1,10 +1,10 @@
 # redactgate on Gretel synthetic_pii_finance_multilingual, dev (200 documents, patterns + NER model)
 
 - Personal-data spans masked (>=80% of characters): **457/616 = 74.2%**
-- Characters of personal data masked: 10470/12354 = 84.7%
+- Characters of personal data masked: 10473/12354 = 84.8%
 - Documents with at least one labelled personal value left unmasked: 73/200 = 36.5%
 - Masked characters inside a labelled span (precision lower bound): 74.9%
-- Time: 28 s, 141 ms per document on CPU
+- Time: 29 s, 145 ms per document on CPU
 
 | label | masked | total | rate |
 |---|---|---|---|

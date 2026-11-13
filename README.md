@@ -248,12 +248,13 @@ placeholders ("[Your Name]"), names in CSV cells, and ID numbers with no label
 word next to them.
 
 **Review fixes after the test run (dev only).** The line after a street is
-now only taken when it carries a postcode or a two-letter code (or a postcode
-line follows), and the last line only when it is a country; "-pad" and "vial"
-were removed from the street types; a number after a capitalised word
-("Section 4 Borgo") no longer starts a street-type-first address. Dev, values
+now only taken when it carries a postcode, a US/Canadian/UK code or a country
+(or a postcode line follows), and the last line only when it is a country; "-pad" and "vial"
+were removed from the street types; for the newly added street types that are
+also ordinary words ("Borgo", "Canale"), a number after a capitalised word
+("Section 4 Borgo") no longer starts an address. Dev, values
 masked: English 86.9% -> 86.8%, German 74.0% -> 74.0%, French 74.5% -> 74.2%,
-Spanish 71.3% -> 70.9%, Italian 75.2% -> 74.9%, Dutch 69.6% -> 69.2%; the
+Spanish 71.3% -> 70.9%, Italian 75.2% -> 75.0%, Dutch 69.6% -> 69.2%; the
 precision lower bound stayed level or rose by up to 0.2 points. The values
 lost are real addresses of those forms ("Matthijspad 658", "76 Vial Albina
 Gallart"); the test figures above were measured before these fixes.
