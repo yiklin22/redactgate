@@ -19,8 +19,10 @@ When the answer comes back, it swaps the real values back in.
   "routing number"), SSNs, IPv4/IPv6, SWIFT/BIC codes, CVVs, passwords and
   API keys, passport/licence/customer/employee IDs after their label, dates of
   birth, coordinates, street addresses with city/state/postcode.
-- **Names and places:** `dslim/bert-base-NER` (MIT licence, about 400 MB,
-  CPU). Spans are widened to whole words. A place is only masked when it is
+- **Names and places:** `Davlan/xlm-roberta-base-ner-hrl` (AFL-3.0, about
+  1 GB, CPU; covers German, English, Spanish, French, Italian, Dutch,
+  Portuguese and others) by default, or `dslim/bert-base-NER` (MIT, English
+  only). Spans are widened to whole words. A place is only masked when it is
   part of a street address; a city or country on its own is left in.
 - **Repeats:** once a value is found, every other copy of it in the document
   is masked with the same placeholder.
@@ -51,6 +53,33 @@ emails 93%, phone numbers 86%, card numbers 93%, IBANs 97%, SWIFT 100%, IPs
 98-100%; weakest are passwords (43%), API keys (39%), customer and employee
 IDs (38-41%), and routing numbers (43%). Full table: `docs/results-test-model.md`.
 Speed: 152 ms per document on CPU with the model, 1 ms without.
+
+**Other languages.** EU businesses are the obvious buyers (GDPR), so the
+same evaluation was run on the dataset's German, French, Spanish, Italian and
+Dutch splits. Dev is the first 200 train documents per language; each test
+split (about 450 documents) was run once. Additions for these languages:
+street-name-first and street-suffix address forms ("Rue de la Paix",
+"Schnellstraße 12, 45678 Berlin", "Åkervägen"), European phone formats,
+"IBAN:"-keyed IBANs, date-of-birth and name labels in each language
+("Geburtsdatum", "né(e) le", "Nom", "Herr", "Monsieur").
+
+| language | dev, English setup | dev, multilingual model | dev, + European rules | **test** (values masked) | test, docs with any leak |
+|---|---|---|---|---|---|
+| German | 44.4% | 53.3% | 67.2% | **66.5%** (766/1152) | 44.6% |
+| French | 37.3% | 50.8% | 68.2% | **68.5%** (886/1293) | 47.2% |
+| Spanish | 45.9% | 56.7% | 66.5% | **71.8%** (971/1353) | 40.3% |
+| Italian | 39.1% | 50.1% | 70.1% | **66.9%** (880/1315) | 47.1% |
+| Dutch | 41.3% | 53.8% | 64.2% | **65.3%** (807/1236) | 46.5% |
+| English | 79.3% | 83.0% | 84.0% | **81.8%** (6715/8205)* | 27.9% |
+
+\* English test with the multilingual model is the second run on the
+English test split (the first, with the English model, gave 76.0%). The
+switch to the multilingual model was decided on dev (83.0% vs 79.3%) before
+that run. Swedish was not tried: the model does not cover it.
+
+Non-English recall is about 15 points below English: half of the documents
+still leak at least one value. The precision lower bound stays between 62%
+and 71%.
 
 **Against Presidio.** Out of the box, Presidio masks about as many names (72%
 vs 74%) but far fewer street addresses (12% vs 82%), SWIFT codes, passwords
@@ -111,7 +140,6 @@ python scripts/evaluate.py --split test         # run once
 
 - No direct call to Claude or another model; it's copy and paste, or the
   JSON API. (No API key was available when this was built.)
-- English only. The dataset has Dutch, French, German, Italian, Spanish and
-  Swedish splits that were not tried.
+- Swedish and other languages outside the model are untested.
 - No PDF or Word input; text only.
 - Presidio with custom recognizers was not tried; only its defaults.

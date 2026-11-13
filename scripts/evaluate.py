@@ -33,7 +33,7 @@ def main():
     ap.add_argument("--detector", choices=["redactgate", "presidio"], default="redactgate",
                     help="presidio: Microsoft Presidio's default analyzer (run from a venv that has it)")
     ap.add_argument("--lang", choices=["en", "de", "fr", "es", "it", "nl"], default="en")
-    ap.add_argument("--ner", choices=["en", "multi"], default="en", help="which NER model")
+    ap.add_argument("--ner", choices=["en", "multi"], default="multi", help="which NER model")
     ap.add_argument("--split", choices=["dev", "test"], default="dev",
                     help="dev = first 500 documents of the train split (for tuning); test = the test split")
     a = ap.parse_args()
@@ -107,7 +107,7 @@ def main():
         lines.append(f"| {k}{note} | {h} | {n} | {h / n:.0%} |")
     out = "\n".join(lines) + "\n"
     print(out)
-    tag = f"{a.lang}-{a.split}-" + (f"{a.ner}-" if a.ner != "en" else "") + ("presidio" if a.detector == "presidio" else "patterns" if a.no_model else "model")
+    tag = f"{a.lang}-{a.split}-" + (f"{a.ner}-" if a.ner != "en" else "en-") + ("presidio" if a.detector == "presidio" else "patterns" if a.no_model else "model")
     if not a.limit:
         (ROOT / f"docs/results-{tag}.md").write_text(out)
     (ROOT / ".cache").mkdir(exist_ok=True)

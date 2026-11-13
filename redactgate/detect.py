@@ -4,8 +4,9 @@ Two kinds of detectors:
 - patterns with validation (card numbers pass the Luhn check, IBANs pass
   mod-97, routing numbers pass the ABA checksum), and patterns keyed on a
   nearby word ("passport no.", "password:");
-- a named-entity model (dslim/bert-base-NER, MIT, runs on CPU) for people,
-  places and organisations.
+- a named-entity model for people, places and organisations: by default
+  Davlan/xlm-roberta-base-ner-hrl (AFL-3.0; de/en/es/fr/it/nl/pt and more),
+  or dslim/bert-base-NER (MIT, English only). Both run on CPU.
 
 Every detector returns Span(start, end, label, source).
 """
@@ -159,7 +160,7 @@ def _pipeline(model: str = "en"):
     return _NER[model]
 
 
-def find_entities(text: str, min_score: float = 0.6, chunk: int = 1500, model: str = "en") -> list[Span]:
+def find_entities(text: str, min_score: float = 0.6, chunk: int = 1500, model: str = "multi") -> list[Span]:
     """People, places and organisations from the NER model. Long text is read in
     overlapping chunks because the model sees at most 512 tokens."""
     out, ner = [], _pipeline(model)
@@ -222,7 +223,7 @@ def propagate(text: str, spans: list[Span]) -> list[Span]:
     return out
 
 
-def detect(text: str, use_model: bool = True, labels: set[str] | None = None, model: str = "en") -> list[Span]:
+def detect(text: str, use_model: bool = True, labels: set[str] | None = None, model: str = "multi") -> list[Span]:
     spans = find_patterns(text) + (find_entities(text, model=model) if use_model else [])
     if labels is not None:
         spans = [s for s in spans if s.label in labels]
