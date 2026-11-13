@@ -119,8 +119,8 @@ What the numbers mean:
 ## Run it
 
 ```bash
-uv venv && uv pip install torch transformers fastapi uvicorn jinja2 python-multipart pyarrow pytest httpx
-pytest -q                                  # 7 tests (patterns only; no model download)
+uv venv && uv pip install torch transformers sentencepiece protobuf fastapi uvicorn jinja2 python-multipart pyarrow pdfplumber python-docx pytest httpx reportlab
+pytest -q                                  # 10 tests (patterns only; no model download)
 uvicorn redactgate.app:app --port 8840     # page at http://localhost:8840
 ```
 
@@ -132,6 +132,11 @@ curl -s localhost:8840/api/redact -H 'content-type: application/json' -d '{"text
 curl -s localhost:8840/api/restore -H 'content-type: application/json' \
   -d '{"text": "Wrote to [EMAIL_1]", "mapping": {"[EMAIL_1]": "ana@lima.pt"}}'
 ```
+
+Files: the page takes a .pdf (with a text layer; scans are refused, there is
+no OCR), .docx (paragraphs and tables) or .txt upload, and so does
+`POST /api/redact-file` (multipart, field `file`). Output is redacted text,
+not a redacted PDF.
 
 Reproduce the measurements:
 
@@ -172,5 +177,5 @@ pages, whose editors may handle inserted text differently.
 - No direct call to Claude or another model; it's copy and paste, or the
   JSON API. (No API key was available when this was built.)
 - Swedish and other languages outside the model are untested.
-- No PDF or Word input; text only.
+- Output is text: a redacted PDF or Word file with the layout kept is not built.
 - Presidio with custom recognizers was not tried; only its defaults.

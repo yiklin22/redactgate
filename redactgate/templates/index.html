@@ -21,8 +21,10 @@
 <h1>redactgate</h1>
 <p class="lede">Take personal data out of text before it goes to an AI model, then put it back into the answer.
 Everything runs on this machine.</p>
-<form method="post" action="/">
+<form method="post" action="/" enctype="multipart/form-data">
   <textarea name="text" placeholder="Paste an email, contract or support ticket">{{ text }}</textarea>
+  <p class="muted">Or upload a file (.pdf with a text layer, .docx, .txt): <input type="file" name="file" accept=".pdf,.docx,.txt,.md,.eml"></p>
+  {% if error %}<p role="alert"><strong>Could not read the file:</strong> {{ error }}</p>{% endif %}
   <div class="row">
     <label><input type="checkbox" name="use_model" value="1" {% if use_model is not defined or use_model %}checked{% endif %}> Use the name and place model (slower, finds names)</label>
     <button type="submit">Redact</button>
