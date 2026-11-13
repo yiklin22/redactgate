@@ -43,12 +43,16 @@ covered.
 
 | split | method | values masked | characters masked | documents with any leak | precision (lower bound) |
 |---|---|---|---|---|---|
-| dev (500) | patterns + model | 79.3% (1118/1409) | 85.6% | 32.2% | 66.6% |
+| dev (500) | patterns + English NER model | 79.3% (1118/1409) | 85.6% | 32.2% | 66.6% |
 | test (2,891) | patterns only | 55.0% (4516/8205) | 63.3% | 58.0% | 65.1% |
-| test (2,891) | **patterns + model** | **76.0% (6239/8205)** | **83.0%** | **37.0%** | 65.6% |
+| test (2,891) | patterns + English NER model | 76.0% (6239/8205) | 83.0% | 37.0% | 65.6% |
+| test (2,891) | **patterns + multilingual NER model (default)** \* | **81.8% (6715/8205)** | **87.2%** | **27.9%** | 64.7% |
 | test (2,891) | Microsoft Presidio analyzer 2.2.366, default config, spaCy 3.8 `en_core_web_lg` | 52.7% (4322/8205) | 62.0% | 64.4% | 29.1% |
 
-Per type on test (patterns + model): names 74%, street addresses 82%,
+\* Second run on the English test split; see the note under the language
+table below.
+
+Per type on test (patterns + English NER model): names 74%, street addresses 82%,
 emails 93%, phone numbers 86%, card numbers 93%, IBANs 97%, SWIFT 100%, IPs
 98-100%; weakest are passwords (43%), API keys (39%), customer and employee
 IDs (38-41%), and routing numbers (43%). Full table: `docs/results-test-model.md`.
@@ -92,7 +96,8 @@ from a venv with `presidio-analyzer` and `en_core_web_lg`.
 
 What the numbers mean:
 
-- **It is not safe as the only control.** 37% of test documents still had at
+- **It is not safe as the only control.** With the default model, 28% of
+  English test documents (and 40-47% in the other languages) still had at
   least one labelled value left in. Use it to cut how much personal data
   leaves, with a person reading the redacted text before it is sent (the
   page shows it for that reason), not as a guarantee.
