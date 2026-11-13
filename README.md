@@ -44,7 +44,7 @@ covered.
 | dev (500) | patterns + model | 79.3% (1118/1409) | 85.6% | 32.2% | 66.6% |
 | test (2,891) | patterns only | 55.0% (4516/8205) | 63.3% | 58.0% | 65.1% |
 | test (2,891) | **patterns + model** | **76.0% (6239/8205)** | **83.0%** | **37.0%** | 65.6% |
-| test (2,891) | Microsoft Presidio 2.2 (analyzer 3.8, default config, spaCy `en_core_web_lg`) | 52.7% (4322/8205) | 62.0% | 64.4% | 29.1% |
+| test (2,891) | Microsoft Presidio analyzer 2.2.366, default config, spaCy 3.8 `en_core_web_lg` | 52.7% (4322/8205) | 62.0% | 64.4% | 29.1% |
 
 Per type on test (patterns + model): names 74%, street addresses 82%,
 emails 93%, phone numbers 86%, card numbers 93%, IBANs 97%, SWIFT 100%, IPs
