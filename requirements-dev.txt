@@ -1,0 +1,9 @@
+# Fast tests (no model download); CI installs only these.
+fastapi
+jinja2
+python-multipart
+pdfplumber
+python-docx
+pytest
+httpx
+reportlab

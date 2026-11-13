@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = [
+    "model: downloads the ~1 GB NER model from Hugging Face (skip with -m 'not model')",
+]

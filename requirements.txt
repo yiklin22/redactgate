@@ -1,0 +1,14 @@
+# Service and detection
+fastapi
+uvicorn
+jinja2
+python-multipart
+pdfplumber
+python-docx
+# NER model (CPU)
+torch
+transformers
+sentencepiece
+protobuf
+# Evaluation
+pyarrow
