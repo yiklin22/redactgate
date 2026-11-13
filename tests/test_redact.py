@@ -44,3 +44,9 @@ def test_password_like_tokens_but_not_message_syntax():
     kinds = labels("Use the code k8P*X^qbXnmihh!4^Y to log in. Field :73:/Bank/9876543210/DEF follows.")
     assert ("SECRET", "k8P*X^qbXnmihh!4^Y") in kinds
     assert not any(v.startswith(":73:") for _, v in kinds)
+
+
+def test_address_pieces_join():
+    t = "Bitte an Schnellstraße 12, 45678 Berlin senden."
+    red, _ = redact(t, use_model=False)
+    assert red == "Bitte an [ADDRESS_1] senden."

@@ -66,7 +66,7 @@ STREET_FIRST = (r"(?i:rue|avenue|boulevard|bd|chemin|allée|place|impasse|quai|r
 # Street types joined to the end of the name (Schnellstraße, Kayleighstraat, Åkervägen).
 STREET_SUFFIX = (r"(?:straße|strasse|str\.|gasse|weg|ring|platz|allee|damm|ufer|steeg|straat|laan|gracht|plein|kade|"
                  r"singel|dreef|vägen|gatan|väg|gata|stig)")
-ADDR_TAIL = (r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{4}\s?[A-Z]{2}|\d{5})"
+ADDR_TAIL = (r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{4}\s?[A-Z]{2}(?:\s+" + CAP + r")?|\d{5}(?:\s+" + CAP + r")?)"
              r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6}(?:\s+" + CAP + r")?)){0,4}")
 
 # (label, regex, validator or None, value group)
@@ -195,11 +195,15 @@ PRIORITY = ["SECRET", "CARD", "CVV", "IBAN", "BANK_ACCOUNT", "ROUTING", "SSN", "
             "GEO", "ADDRESS", "PERSON", "ORG"]
 
 
-def merge(spans: list[Span]) -> list[Span]:
-    """Union overlapping spans; the merged span takes the highest-priority label."""
+def merge(spans: list[Span], text: str = "") -> list[Span]:
+    """Union overlapping spans; the merged span takes the highest-priority label.
+    Address pieces split only by ", " are joined into one address."""
     out: list[Span] = []
     for s in sorted(spans, key=lambda s: (s.start, -s.end)):
-        if out and s.start < out[-1].end:
+        if (out and text and s.label == "ADDRESS" == out[-1].label and 0 <= s.start - out[-1].end <= 2
+                and not text[out[-1].end:s.start].strip(" ,")):
+            out[-1] = Span(out[-1].start, max(out[-1].end, s.end), "ADDRESS", out[-1].source)
+        elif out and s.start < out[-1].end:
             last = out[-1]
             label = min((last.label, s.label), key=PRIORITY.index)
             out[-1] = Span(last.start, max(last.end, s.end), label, last.source if label == last.label else s.source)
@@ -227,4 +231,4 @@ def detect(text: str, use_model: bool = True, labels: set[str] | None = None, mo
     spans = find_patterns(text) + (find_entities(text, model=model) if use_model else [])
     if labels is not None:
         spans = [s for s in spans if s.label in labels]
-    return merge(propagate(text, merge(spans)))
+    return merge(propagate(text, merge(spans, text)), text)
