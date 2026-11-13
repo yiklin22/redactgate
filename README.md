@@ -136,6 +136,30 @@ python scripts/evaluate.py --split dev          # first 500 train documents
 python scripts/evaluate.py --split test         # run once
 ```
 
+## Browser extension (`extension/`)
+
+The product shape: paste into ChatGPT, Claude or Gemini and the text is
+redacted before it lands in the box; select the AI's answer and press
+"Restore selection" to copy it with the real values back in.
+
+- The extension calls the redactgate service on your own computer
+  (`127.0.0.1:8840`) from its background worker; the chat site never sees the
+  service or the mapping. The mapping lives only in that tab's memory.
+- If the service is not running, the paste is **blocked** with a note,
+  rather than letting the unredacted text through.
+
+Install: start the service (`uvicorn redactgate.app:app --port 8840`), then
+Chrome > Extensions > Developer mode > Load unpacked > `extension/`.
+
+Tests (`cd extension && npm install && npm test`, 4 tests): `content.js` in
+headless Chromium on a fake chat page served at `https://chatgpt.com`
+(intercepted, nothing reaches the real site), calling the real local
+service: paste into a textarea and into a rich-text editor, paste blocked
+when the service is down, restore of a selected answer. `node
+test/load-extension.js` loads the real unpacked extension and pastes through
+its background worker. Not tested on the real ChatGPT, Claude or Gemini
+pages, whose editors may handle inserted text differently.
+
 ## Not done
 
 - No direct call to Claude or another model; it's copy and paste, or the

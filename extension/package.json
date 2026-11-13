@@ -1,0 +1,6 @@
+{
+  "name": "redactgate-extension",
+  "private": true,
+  "scripts": { "test": "node --test test/content.test.js" },
+  "devDependencies": { "playwright": "^1.65.0" }
+}
