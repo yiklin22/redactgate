@@ -1,16 +1,16 @@
 # redactgate on Gretel synthetic_pii_finance_multilingual, dev (200 documents, patterns + NER model)
 
-- Personal-data spans masked (>=80% of characters): **396/565 = 70.1%**
-- Characters of personal data masked: 8910/11567 = 77.0%
-- Documents with at least one labelled personal value left unmasked: 88/200 = 44.0%
-- Masked characters inside a labelled span (precision lower bound): 73.8%
-- Time: 26 s, 131 ms per document on CPU
+- Personal-data spans masked (>=80% of characters): **401/565 = 71.0%**
+- Characters of personal data masked: 9029/11567 = 78.1%
+- Documents with at least one labelled personal value left unmasked: 85/200 = 42.5%
+- Masked characters inside a labelled span (precision lower bound): 74.1%
+- Time: 26 s, 132 ms per document on CPU
 
 | label | masked | total | rate |
 |---|---|---|---|
 | name | 162 | 227 | 71% |
 | company (not personal; masked only as ORG/any) | 160 | 213 | 75% |
-| street_address | 116 | 171 | 68% |
+| street_address | 117 | 171 | 68% |
 | date (not personal; masked only as ORG/any) | 0 | 42 | 0% |
 | phone_number | 32 | 36 | 89% |
 | email | 27 | 28 | 96% |
@@ -21,12 +21,12 @@
 | ipv4 | 8 | 8 | 100% |
 | iban | 8 | 8 | 100% |
 | first_name | 5 | 7 | 71% |
-| bank_routing_number | 0 | 5 | 0% |
+| bank_routing_number | 2 | 5 | 40% |
 | passport_number | 0 | 5 | 0% |
 | bban | 4 | 5 | 80% |
 | employee_id | 0 | 5 | 0% |
 | last_name | 4 | 4 | 100% |
-| password | 2 | 4 | 50% |
+| password | 4 | 4 | 100% |
 | user_name | 0 | 4 | 0% |
 | credit_card_security_code | 0 | 3 | 0% |
 | local_latlng | 2 | 3 | 67% |

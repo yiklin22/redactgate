@@ -98,8 +98,9 @@ from a venv with `presidio-analyzer` and `en_core_web_lg`.
 tokens), passwords after "password ... be:", usernames after "User Name:",
 PINs, IDs with lowercase letters, and routing numbers with words between the
 label and the number. Dev: English 84.0% -> 85.1%, German 67.6% -> 68.4%,
-French 68.2% -> 69.8%; the precision lower bound moved -1.2, -1.2 and +0.9
-points. Test was not re-run for this change, so the test figures above are
+French 68.2% -> 69.8%, Spanish 66.5% -> 67.1%, Italian 70.1% -> 71.0%, Dutch
+65.0% -> 65.6%; the precision lower bound moved -1.2 (en), -1.2 (de), +0.9
+(fr), -0.4 (es), +0.3 (it) and -2.9 (nl) points. Test was not re-run for this change, so the test figures above are
 for the earlier version.
 
 What the numbers mean:
