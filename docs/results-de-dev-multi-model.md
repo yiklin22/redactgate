@@ -1,10 +1,10 @@
 # redactgate on Gretel synthetic_pii_finance_multilingual, dev (200 documents, patterns + NER model)
 
-- Personal-data spans masked (>=80% of characters): **349/516 = 67.6%**
-- Characters of personal data masked: 7769/9998 = 77.7%
-- Documents with at least one labelled personal value left unmasked: 92/200 = 46.0%
-- Masked characters inside a labelled span (precision lower bound): 62.3%
-- Time: 25 s, 127 ms per document on CPU
+- Personal-data spans masked (>=80% of characters): **353/516 = 68.4%**
+- Characters of personal data masked: 7876/9998 = 78.8%
+- Documents with at least one labelled personal value left unmasked: 89/200 = 44.5%
+- Masked characters inside a labelled span (precision lower bound): 61.1%
+- Time: 25 s, 126 ms per document on CPU
 
 | label | masked | total | rate |
 |---|---|---|---|
@@ -24,7 +24,7 @@
 | date_time (not personal; masked only as ORG/any) | 0 | 6 | 0% |
 | ipv6 | 5 | 5 | 100% |
 | customer_id | 2 | 4 | 50% |
-| password | 3 | 4 | 75% |
+| password | 4 | 4 | 100% |
 | swift_bic_code | 4 | 4 | 100% |
 | last_name | 1 | 4 | 25% |
 | account_pin | 1 | 4 | 25% |
@@ -33,7 +33,7 @@
 | date_of_birth | 3 | 4 | 75% |
 | bban | 2 | 3 | 67% |
 | local_latlng | 1 | 3 | 33% |
-| api_key | 1 | 3 | 33% |
+| api_key | 3 | 3 | 100% |
 | credit_card_number | 0 | 3 | 0% |
-| user_name | 0 | 2 | 0% |
+| user_name | 1 | 2 | 50% |
 | first_name | 1 | 1 | 100% |

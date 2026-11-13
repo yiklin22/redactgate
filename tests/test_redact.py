@@ -57,3 +57,14 @@ def test_surname_points_to_the_full_name_and_bare_placeholders_restore():
     red, mapping = redact(text, use_model=False)
     assert red.count("[PERSON_1]") == 2 and "[PERSON_1_LAST]" in red
     assert restore("Dear Ms. PERSON_1_LAST, we refunded [PERSON_1].", mapping) == "Dear Ms. Lima, we refunded Ana Lima."
+
+
+def test_keyed_secrets_and_ids():
+    found = labels("APIKey: dE216e301cc66D901cbfAeBFF10e1FbD. The new password will be: Rqe9zC)mbj+72EECE) "
+                   "User Name: thart. Employee ID: Jp-58502. The account pin is 598145. "
+                   "Bank Routing Number (for direct deposit): 336648287.")
+    for item in [("SECRET", "dE216e301cc66D901cbfAeBFF10e1FbD"), ("SECRET", "Rqe9zC)mbj+72EECE)"), ("ID", "thart"),
+                 ("ID", "Jp-58502"), ("SECRET", "598145"), ("ROUTING", "336648287")]:
+        assert item in found, item
+    # CamelCase field names and ordinary words after "user" are left alone.
+    assert labels("<StatementBeginBalance>1200</StatementBeginBalance> The user workstation was updated.") == set()

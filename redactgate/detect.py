@@ -95,7 +95,7 @@ PATTERNS = [
     ("SECRET", re.compile(r"\b(?:sk|pk|rk)_(?:live|test)_[A-Za-z0-9]{10,}\b|\bAKIA[0-9A-Z]{16}\b|\bgh[pousr]_[A-Za-z0-9]{20,}\b"), None, 0),
     ("ID", re.compile(r"(?i:passport|driver'?s?\s+licen[cs]e|licen[cs]e|employee|staff|customer|client|member|account|acct|"
                       r"policy|tax|national|social\s+security)\s*(?i:id|no\.?|number|num|#)?[\s:*#]*(?i:is\s+)?"
-                      r"([A-Z0-9][A-Z0-9-]{4,}\d[A-Z0-9-]*|\d[A-Z0-9-]{4,})\b"), None, 1),
+                      r"([A-Za-z0-9][A-Za-z0-9-]{3,}\d[A-Za-z0-9-]*|\d[A-Za-z0-9-]{4,})\b"), None, 1),
     ("DOB", re.compile(r"(?i:born|birth|d\.?o\.?b\.?|geburtsdatum|geboren|naissance|n[ée]\(?e?\)?\s+le|nacimiento|nacid[oa]|"
                        r"nascita|nat[oa]\s+il|geboortedatum|f[öo]delsedatum|f[öo]dd)[^\n\d]{0,20}"
                        r"(\d{1,4}[/.-]\d{1,2}[/.-]\d{1,4}|\d{8}|[^\W\d_]+\.?\s+\d{1,2},?\s+\d{4}|\d{1,2}\.?\s+[^\W\d_]+\.?\s+\d{4})"), None, 1),
@@ -108,7 +108,14 @@ PATTERNS = [
                           r"intestatario|naam|volledige\s+naam|begunstigde|rekeninghouder|namn)"
                           r"[\"']?\s*(?:[:=>]|\bis\b)\s*[\"']?\s*"
                           r"(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){1,3})"), None, 1),
-    ("ROUTING", re.compile(r"(?i:routing|aba)\s*(?i:number|no\.?|#)?\s*[:#]?\s*(\d{9})\b"), None, 1),
+    ("ROUTING", re.compile(r"(?i:routing|aba)\s*(?i:number|no\.?|#)?[^\d\n]{0,30}?(\d{9})\b"), None, 1),
+    ("SECRET", re.compile(r"(?<![\w-])(?=[A-Za-z0-9_-]{20,64}(?![\w-]))(?=[A-Za-z0-9_-]*[a-z])(?=[A-Za-z0-9_-]*[A-Z])(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{20,64}"),
+     lambda m: not re.fullmatch(r"[A-Z]{2}\d{2}[A-Z0-9]+", m.group()), 0),
+    ("SECRET", re.compile(r"(?i:password|passcode|passwd)\b[^.\n]{0,30}?(?:[:=]|\bis\b|\bbe\b|['\"]|e\.g\.)\s*['\"]?([^\s'\",;]{6,40})"),
+     lambda m: bool(re.search(r"\d|[^\w]", m.group(1))) and not m.group(1).startswith("("), 1),
+    ("SECRET", re.compile(r"(?i:\bpin)\b[^\d\n]{0,25}(\d{4,6})\b"), None, 1),
+    ("ID", re.compile(r"(?i:user\s*name|username|user\s*id|login)\s*[:=]\s*\**\s*([\w.@-]{3,})"), None, 1),
+    ("ID", re.compile(r"(?i:\buser)\s+([\w.@-]*\d[\w.@-]*)"), None, 1),
     ("CARD", re.compile(r"(?i:card)[^\n\d]{0,25}(\d{4}[ -]\d{4}[ -]\d{4}[ -]\d{3,4}|\d{4}[ -]\d{6}[ -]\d{5}|\d{15,16})\b"), None, 1),
     ("BANK_ACCOUNT", re.compile(r"\b[A-Z]{4}\d{10,30}\b"), None, 0),
     ("BANK_ACCOUNT", re.compile(r"(?i:bban|account\s+(?:number|no\.?|#))[^\w\n]{0,4}([A-Z0-9]{6,34})\b"),
@@ -141,7 +148,10 @@ def find_patterns(text: str) -> list[Span]:
         for m in rx.finditer(text):
             if ok is not None and not ok(m):
                 continue
-            out.append(Span(m.start(group), m.end(group), label, "pattern"))
+            start, end = m.start(group), m.end(group)
+            while end > start and text[end - 1] in ".,;:":  # sentence punctuation is not part of the value
+                end -= 1
+            out.append(Span(start, end, label, "pattern"))
     return out
 
 

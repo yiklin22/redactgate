@@ -94,6 +94,14 @@ take custom recognizers, and adding address and banking ones would close much
 of the gap. Run: `python scripts/evaluate.py --split test --detector presidio`
 from a venv with `presidio-analyzer` and `en_core_web_lg`.
 
+**After the test runs (dev only).** Patterns for API keys (long mixed-case
+tokens), passwords after "password ... be:", usernames after "User Name:",
+PINs, IDs with lowercase letters, and routing numbers with words between the
+label and the number. Dev: English 84.0% -> 85.1%, German 67.6% -> 68.4%,
+French 68.2% -> 69.8%; the precision lower bound moved -1.2, -1.2 and +0.9
+points. Test was not re-run for this change, so the test figures above are
+for the earlier version.
+
 What the numbers mean:
 
 - **It is not safe as the only control.** With the default model, 28% of
@@ -127,7 +135,7 @@ What the numbers mean:
 
 ```bash
 uv venv && uv pip install torch transformers sentencepiece protobuf fastapi uvicorn jinja2 python-multipart pyarrow pdfplumber python-docx pytest httpx reportlab
-pytest -q                                  # 11 tests (patterns only; no model download)
+pytest -q                                  # 12 tests (patterns only; no model download)
 uvicorn redactgate.app:app --port 8840     # page at http://localhost:8840
 ```
 
