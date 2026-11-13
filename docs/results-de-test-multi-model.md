@@ -1,16 +1,16 @@
 # redactgate on Gretel synthetic_pii_finance_multilingual, test (453 documents, patterns + NER model)
 
-- Personal-data spans masked (>=80% of characters): **766/1152 = 66.5%**
-- Characters of personal data masked: 16025/21093 = 76.0%
-- Documents with at least one labelled personal value left unmasked: 202/453 = 44.6%
-- Masked characters inside a labelled span (precision lower bound): 63.9%
+- Personal-data spans masked (>=80% of characters): **781/1152 = 67.8%**
+- Characters of personal data masked: 16422/21093 = 77.9%
+- Documents with at least one labelled personal value left unmasked: 197/453 = 43.5%
+- Masked characters inside a labelled span (precision lower bound): 63.1%
 - Time: 54 s, 120 ms per document on CPU
 
 | label | masked | total | rate |
 |---|---|---|---|
-| name | 394 | 530 | 74% |
-| company (not personal; masked only as ORG/any) | 369 | 436 | 85% |
-| street_address | 181 | 282 | 64% |
+| name | 397 | 530 | 75% |
+| company (not personal; masked only as ORG/any) | 367 | 436 | 84% |
+| street_address | 186 | 282 | 66% |
 | date (not personal; masked only as ORG/any) | 0 | 118 | 0% |
 | phone_number | 21 | 49 | 43% |
 | time (not personal; masked only as ORG/any) | 0 | 36 | 0% |
@@ -25,11 +25,11 @@
 | first_name | 15 | 16 | 94% |
 | bank_routing_number | 1 | 15 | 7% |
 | passport_number | 3 | 12 | 25% |
-| account_pin | 0 | 9 | 0% |
+| account_pin | 3 | 9 | 33% |
 | driver_license_number | 0 | 9 | 0% |
 | ssn | 1 | 9 | 11% |
 | ipv6 | 8 | 8 | 100% |
-| api_key | 4 | 8 | 50% |
+| api_key | 8 | 8 | 100% |
 | ipv4 | 7 | 7 | 100% |
 | user_name | 2 | 6 | 33% |
 | password | 2 | 5 | 40% |

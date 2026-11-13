@@ -103,10 +103,25 @@ French 68.2% -> 69.8%, Spanish 66.5% -> 67.1%, Italian 70.1% -> 71.0%, Dutch
 (fr), -0.4 (es), +0.3 (it) and -2.9 (nl) points. Test was not re-run for this change, so the test figures above are
 for the earlier version.
 
+**Final version on test (run once, after all changes above, no tuning after).**
+
+| language | values masked | docs with any leak | precision (lower bound) |
+|---|---|---|---|
+| English | **83.2%** (6823/8205) | 25.7% | 64.4% |
+| German | 67.8% (781/1152) | 43.5% | 63.1% |
+| French | 69.6% (900/1293) | 44.7% | 69.7% |
+| Spanish | 72.3% (978/1353) | 39.5% | 67.5% |
+| Italian | 68.0% (894/1315) | 45.5% | 69.8% |
+| Dutch | 66.3% (819/1236) | 44.9% | 59.8% |
+
+This is the third look at the English test split and the second at the
+others; the gains over the earlier test figures (+0.5 to +1.4 points) match
+the dev gains, so they are not an artefact of looking.
+
 What the numbers mean:
 
-- **It is not safe as the only control.** With the default model, 28% of
-  English test documents (and 40-47% in the other languages) still had at
+- **It is not safe as the only control.** With the final version, 26% of
+  English test documents (and 40-46% in the other languages) still had at
   least one labelled value left in. Use it to cut how much personal data
   leaves, with a person reading the redacted text before it is sent (the
   page shows it for that reason), not as a guarantee.
