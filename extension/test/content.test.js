@@ -10,7 +10,7 @@ const { chromium } = require("playwright");
 
 const PAGE = fs.readFileSync(path.join(__dirname, "fake-chat.html"), "utf8");
 const CONTENT = path.join(__dirname, "..", "content.js");
-const TEXT = "Please refund Ms. Ana Lima (ana.lima@example.com, +1 (415) 555-0132), card 4111 1111 1111 1111.";
+const TEXT = "Please refund Ms. Ana Lima (ana.lima@example.com, +1 (415) 555-0132), card 4111 1111 1111 1111. Ana Lima, or Ms. Lima, called.";
 let browser;
 
 test.before(async () => { browser = await chromium.launch(); });
@@ -89,6 +89,7 @@ test("Restore selection puts the real values back", async () => {
   await page.waitForFunction(() => window.__redactgateLastRestore);
   const out = await page.evaluate(() => window.__redactgateLastRestore);
   assert.match(out, /Dear Ana Lima, we refunded/);
+  assert.match(out, /Thanks, Ms\. Lima\./);
   assert.match(out, /went to ana\.lima@example\.com\./);
   assert.match(out, /\[PERSON_9\] is unknown/);
   await page.context().close();

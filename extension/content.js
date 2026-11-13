@@ -24,7 +24,8 @@
   }
 
   function restore(text) {
-    return text.replace(/\[[A-Z_]+_\d+\]/g, (m) => (m in mapping ? mapping[m] : m));
+    // Same rule as redactgate.redact.restore: brackets optional, _LAST for surnames.
+    return text.replace(/\[?\b([A-Z]+(?:_[A-Z]+)*_\d+(?:_LAST)?)\b\]?/g, (m, key) => mapping["[" + key + "]"] ?? m);
   }
 
   function insert(target, text) {
