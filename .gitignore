@@ -8,6 +8,9 @@ data/raw/
 .env
 .env.*
 *.db
+*.db-*
 *.sqlite
 *.sqlite3
+*.sqlite-*
+*.sqlite3-*
 .DS_Store

@@ -57,7 +57,7 @@ only when it carries a postcode, a US/Canadian/UK code or a country (or a
 postcode line follows), and the last line only when it is a country; "-pad"
 and "vial" were removed; for the newly added street types that are also
 ordinary words ("Borgo", "Canale"), a number right after a capitalised word
-does not start an address unless a postcode follows after a comma; the
+does not start an address unless a postcode comes after a comma; the
 suffix word is limited to 40 letters (a long hyphenated word took seconds
 to scan).
 

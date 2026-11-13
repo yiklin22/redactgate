@@ -53,7 +53,8 @@ measured on dev only and the test split was not run again. On dev they cost
 
 ```bash
 git clone <this repository> && cd redactgate
-uv venv && uv pip install -r requirements.txt   # or: python -m venv .venv && pip install -r requirements.txt
+uv venv && uv pip install -r requirements.txt   # or: python -m venv .venv && .venv/bin/pip install -r requirements.txt
+source .venv/bin/activate
 python scripts/demo.py                          # first run downloads the NER model (about 1 GB)
 ```
 
@@ -192,7 +193,7 @@ usernames (53%) and CVVs (54%). Full table:
 `docs/results-en-test-multi-model.md`. Speed: 233 ms per document on CPU with the model for this
 English run, on a machine busy with other jobs (the other languages took
 123-136 ms; the earlier English-model run took 152 ms). Patterns alone take
-about 1.1 ms per document.
+about 1 ms per document.
 
 **How often the test split was looked at.** This version's run is the
 fifth look at the English test split (patterns only, English model,
@@ -247,18 +248,18 @@ precision lower bound on every dev split. Other groups are labelled template
 placeholders ("[Your Name]"), names in CSV cells, and ID numbers with no label
 word next to them.
 
-**Review fixes after the test run (dev only).** The line after a street is
-now only taken when it carries a postcode, a US/Canadian/UK code or a country
-(or a postcode line follows), and the last line only when it is a country; "-pad" and "vial"
-were removed from the street types; for the newly added street types that are
-also ordinary words ("Borgo", "Canale"), a number after a capitalised word
-("Section 4 Borgo") no longer starts an address unless a postcode
-follows after a comma. Dev, values
-masked: English 86.9% -> 86.8%, German 74.0% -> 74.0%, French 74.5% -> 74.2%,
-Spanish 71.3% -> 70.9%, Italian 75.2% -> 75.0%, Dutch 69.6% -> 69.2%; the
-precision lower bound stayed level or rose by up to 0.2 points. The values
-lost are real addresses of those forms ("Matthijspad 658", "76 Vial Albina
-Gallart"); the test figures above were measured before these fixes.
+**Review fixes after the test run (dev only).** The line after a street is now
+only taken when it carries a postcode, a US/Canadian/UK code or a country (or
+a postcode line follows), and the last line only when it is a country; "-pad"
+and "vial" were removed from the street types; for the newly added street
+types that are also ordinary words ("Borgo", "Canale"), a number after a
+capitalised word ("Section 4 Borgo") no longer starts an address unless a
+postcode comes after a comma. Dev, values masked: English 86.9% -> 86.8%,
+German 74.0% -> 74.0%, French 74.5% -> 74.2%, Spanish 71.3% -> 70.9%, Italian
+75.2% -> 75.0%, Dutch 69.6% -> 69.2%; the precision lower bound stayed level
+or rose by up to 0.2 points. The values lost are real addresses of those forms
+("Matthijspad 658", "76 Vial Albina Gallart"); the test figures above were
+measured before these fixes.
 
 **Against Presidio.** Out of the box, Presidio masks about as many names (72%
 vs 74% for the English-model setup) but far fewer street addresses (12% vs
@@ -302,6 +303,7 @@ output (English dev: recall unchanged at 84.0%, lower bound 64.9% -> 65.8%).
 
 ```bash
 uv venv && uv pip install -r requirements.txt -r requirements-dev.txt
+source .venv/bin/activate
 pytest -q -m "not model"                   # fast tests, no model download (what CI runs)
 pytest -q                                  # also the test that runs the NER model
 uvicorn redactgate.app:app --port 8840     # page at http://localhost:8840
