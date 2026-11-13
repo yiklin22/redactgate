@@ -4,3 +4,10 @@ __pycache__/
 data/raw/
 *.pyc
 .venv-presidio/
+.pytest_cache/
+.env
+.env.*
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
