@@ -252,7 +252,8 @@ now only taken when it carries a postcode, a US/Canadian/UK code or a country
 (or a postcode line follows), and the last line only when it is a country; "-pad" and "vial"
 were removed from the street types; for the newly added street types that are
 also ordinary words ("Borgo", "Canale"), a number after a capitalised word
-("Section 4 Borgo") no longer starts an address. Dev, values
+("Section 4 Borgo") no longer starts an address unless a city or postcode
+follows. Dev, values
 masked: English 86.9% -> 86.8%, German 74.0% -> 74.0%, French 74.5% -> 74.2%,
 Spanish 71.3% -> 70.9%, Italian 75.2% -> 75.0%, Dutch 69.6% -> 69.2%; the
 precision lower bound stayed level or rose by up to 0.2 points. The values

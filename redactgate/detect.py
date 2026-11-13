@@ -149,12 +149,13 @@ PATTERNS = [
     ("SECRET", re.compile(r"(?<![\w@])[^\s\"'<>()\[\]{},;]{10,40}(?![\w])"),
      lambda m: sum(bool(re.search(rx, m.group())) for rx in (r"[a-z]", r"[A-Z]", r"\d", r"[^\w\s]")) >= 4
      and not re.search(r"https?:|www\.|@|\.(?:com|org|net)\b|^\$|[.,:]$|[:/|=]|^\(|\d{5}|-\d{4}", m.group()), 0),
-    # For street types that are also ordinary words or names (Borgo, Canale), not
-    # after a capitalised word ("Version 2 Canale Today", "Section 4 Borgo Notes").
+    # For street types that are also ordinary words or names (Borgo, Canale) and
+    # no city/postcode after the street, not after a capitalised word
+    # ("Version 2 Canale Today", "Section 4 Borgo Notes").
     ("ADDRESS", re.compile(r"\b\d{1,5}[a-z]?,?\s+" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
                            + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL),
      lambda m: not (re.match(r"\d+[a-z]?,?\s+(\w+)", m.group()).group(1).lower() in AMBIGUOUS_FIRST
-                    and re.search(r"(?:^|[^\w])[A-ZÀ-ÖØ-Þ][^\W\d_]*[ \t]+$", m.string[max(0, m.start() - 40):m.start()])), 0),
+                    and "," not in m.group() and re.search(r"(?:^|[^\w])[A-ZÀ-ÖØ-Þ][^\W\d_]*[ \t]+$", m.string[max(0, m.start() - 40):m.start()])), 0),
     ("ADDRESS", re.compile(r"\b" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
                            + CAP + r"(?:\s+" + CAP + r"){0,3},?\s+\d{1,5}[a-z]?\b"
                            r"(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),

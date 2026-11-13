@@ -95,3 +95,4 @@ def test_address_patterns_leave_ordinary_text_alone():
 
 def test_name_before_a_house_number_keeps_the_address():
     assert ("ADDRESS", "12 rue de Paris, 75001 Paris") in labels("Jean Dupont 12 rue de Paris, 75001 Paris")
+    assert ("ADDRESS", "12 Borgo Pio, 00193 Roma") in labels("Ship to Anna 12 Borgo Pio, 00193 Roma")
