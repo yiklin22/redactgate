@@ -32,13 +32,18 @@ def main():
     ap.add_argument("--no-model", action="store_true")
     ap.add_argument("--detector", choices=["redactgate", "presidio"], default="redactgate",
                     help="presidio: Microsoft Presidio's default analyzer (run from a venv that has it)")
+    ap.add_argument("--lang", choices=["en", "de", "fr", "es", "it", "nl"], default="en")
+    ap.add_argument("--ner", choices=["en", "multi"], default="en", help="which NER model")
     ap.add_argument("--split", choices=["dev", "test"], default="dev",
                     help="dev = first 500 documents of the train split (for tuning); test = the test split")
     a = ap.parse_args()
+    files = {"en": "en_{}", "de": "German_{}", "fr": "France_{}", "es": "Spanish_{}", "it": "Italian_{}", "nl": "Dutch_{}"}
+    name = files[a.lang]
     if a.split == "test":
-        rows = pq.read_table(ROOT / "data/raw/en_test.parquet").to_pylist()
+        rows = pq.read_table(ROOT / f"data/raw/{name.format('test')}.parquet").to_pylist()
     else:
-        rows = pq.read_table(ROOT / "data/raw/en_train.parquet").slice(0, 500).to_pylist()
+        n = 500 if a.lang == "en" else 200
+        rows = pq.read_table(ROOT / f"data/raw/{name.format('train')}.parquet").slice(0, n).to_pylist()
     if a.limit:
         rows = rows[: a.limit]
     labels = PERSONAL | {"ORG"}
@@ -57,7 +62,7 @@ def main():
             spans = [Span(r.start, r.end, r.entity_type, "presidio") for r in presidio.analyze(text=text, language="en")]
             personal_spans = spans  # Presidio's anonymizer masks everything it detects
         else:
-            spans = detect(text, use_model=not a.no_model, labels=labels)
+            spans = detect(text, use_model=not a.no_model, labels=labels, model=a.ner)
             personal_spans = [s for s in spans if s.label in PERSONAL]
         covered = bytearray(len(text))
         for s in personal_spans:
@@ -89,7 +94,7 @@ def main():
     personal = {k: v for k, v in per.items() if k not in NOT_PERSONAL}
     caught = sum(v[0] for v in personal.values())
     total = sum(v[1] for v in personal.values())
-    method = "Microsoft Presidio, default analyzer" if a.detector == "presidio" else ("patterns only" if a.no_model else "patterns + NER model")
+    method = f"lang={a.lang}, ner={a.ner}: " + "Microsoft Presidio, default analyzer" if a.detector == "presidio" else ("patterns only" if a.no_model else "patterns + NER model")
     lines = [f"# redactgate on Gretel synthetic_pii_finance_multilingual, {a.split} ({len(rows)} documents, {method})", "",
              f"- Personal-data spans masked (>=80% of characters): **{caught}/{total} = {caught / total:.1%}**",
              f"- Characters of personal data masked: {chars_hit}/{chars_gold} = {chars_hit / chars_gold:.1%}",
@@ -102,7 +107,7 @@ def main():
         lines.append(f"| {k}{note} | {h} | {n} | {h / n:.0%} |")
     out = "\n".join(lines) + "\n"
     print(out)
-    tag = f"{a.split}-" + ("presidio" if a.detector == "presidio" else "patterns" if a.no_model else "model")
+    tag = f"{a.lang}-{a.split}-" + (f"{a.ner}-" if a.ner != "en" else "") + ("presidio" if a.detector == "presidio" else "patterns" if a.no_model else "model")
     if not a.limit:
         (ROOT / f"docs/results-{tag}.md").write_text(out)
     (ROOT / ".cache").mkdir(exist_ok=True)

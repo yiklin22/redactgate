@@ -58,7 +58,15 @@ STREET = (r"(?i:alley|annex|arcade|avenue|ave|bayoo|beach|bend|bluffs?|bottoms?|
           r"ridges?|river|roads?|rd|route|row|rue|run|shoals?|shores?|skyway|springs?|spurs?|squares?|st|station|"
           r"stravenue|stream|streets?|summit|terrace|throughway|trace|track|trafficway|trail|trailer|tunnel|turnpike|"
           r"underpass|unions?|valleys?|via|viaduct|views?|villages?|ville|vista|walks?|wall|ways?|wells?)")
-CAP = r"[A-Z][A-Za-z'-]*"
+CAP = r"[A-ZÀ-ÖØ-ÞĀ-Ž][^\W\d_]*(?:['-][^\W\d_]+)*"
+# Street types written before the name (Rue de la Paix, Via Roma, Calle Mayor).
+STREET_FIRST = (r"(?i:rue|avenue|boulevard|bd|chemin|allée|place|impasse|quai|route|calle|c/|avenida|avda\.?|camino|"
+                r"pasaje|paseo|plaza|carrera|carrer|ronda|travesía|via|viale|piazza|corso|largo|strada|vicolo|contrada|rua)")
+# Street types joined to the end of the name (Schnellstraße, Kayleighstraat, Åkervägen).
+STREET_SUFFIX = (r"(?:straße|strasse|str\.|gasse|weg|ring|platz|allee|damm|ufer|steeg|straat|laan|gracht|plein|kade|"
+                 r"singel|dreef|vägen|gatan|väg|gata|stig)")
+ADDR_TAIL = (r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{4}\s?[A-Z]{2}|\d{5})"
+             r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6}(?:\s+" + CAP + r")?)){0,4}")
 
 # (label, regex, validator or None, value group)
 PATTERNS = [
@@ -72,6 +80,9 @@ PATTERNS = [
     ("IP", re.compile(r"(?<![\w:])(?:[0-9a-fA-F]{1,4}:){3,7}[0-9a-fA-F]{1,4}(?![\w:])|"
                       r"(?<![\w:])(?:[0-9a-fA-F]{1,4}:){1,6}:(?:[0-9a-fA-F]{1,4}(?::[0-9a-fA-F]{1,4}){0,5})?(?![\w:])"),
      lambda m: bool(re.search(r"[a-fA-F]|::", m.group())), 0),
+    ("PHONE", re.compile(r"(?<![\w+])\+\d{1,3}(?:[\s.-]?(?:\(\d{1,4}\)|\d{1,4})){2,5}(?![\w])|(?<![\w])0\d(?:[\s.-]\d{2}){4}(?![\w])"),
+     lambda m: 9 <= len(re.sub(r"\D", "", m.group())) <= 15, 0),
+    ("IBAN", re.compile(r"(?i:iban)\s*:?\s*([A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){2,7}(?: ?[A-Z0-9]{1,3})?)\b"), None, 1),
     ("PHONE", re.compile(r"(?<![\w+])(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d{2,4}[\s.-]\d{3,4}(?:[\s.-]\d{2,4})?"
                          r"(?:\s*(?:x|ext\.?)\s*\d{1,5})?(?![\w])|(?<![\w+])\+\d{8,14}(?!\w)"),
      lambda m: len(re.sub(r"\D", "", m.group())) >= 9, 0),
@@ -84,12 +95,16 @@ PATTERNS = [
     ("ID", re.compile(r"(?i:passport|driver'?s?\s+licen[cs]e|licen[cs]e|employee|staff|customer|client|member|account|acct|"
                       r"policy|tax|national|social\s+security)\s*(?i:id|no\.?|number|num|#)?[\s:*#]*(?i:is\s+)?"
                       r"([A-Z0-9][A-Z0-9-]{4,}\d[A-Z0-9-]*|\d[A-Z0-9-]{4,})\b"), None, 1),
-    ("DOB", re.compile(r"(?i:born|birth|d\.?o\.?b\.?)[^\n\d]{0,20}"
-                       r"(\d{1,4}[/.-]\d{1,2}[/.-]\d{1,4}|(?i:[a-z]+)\s+\d{1,2},?\s+\d{4}|\d{1,2}\s+(?i:[a-z]+)\s+\d{4})"), None, 1),
+    ("DOB", re.compile(r"(?i:born|birth|d\.?o\.?b\.?|geburtsdatum|geboren|naissance|n[ée]\(?e?\)?\s+le|nacimiento|nacid[oa]|"
+                       r"nascita|nat[oa]\s+il|geboortedatum|f[öo]delsedatum|f[öo]dd)[^\n\d]{0,20}"
+                       r"(\d{1,4}[/.-]\d{1,2}[/.-]\d{1,4}|\d{8}|[^\W\d_]+\.?\s+\d{1,2},?\s+\d{4}|\d{1,2}\.?\s+[^\W\d_]+\.?\s+\d{4})"), None, 1),
     ("GEO", re.compile(r"-?\d{1,3}\.\d{3,},?\s+-?\d{1,3}\.\d{3,}|-?\d{1,3}\.\d{3,},-?\d{1,3}\.\d{3,}"), None, 0),
     ("GEO", re.compile(r"(?i:latitude)\s*:?\s*-?\d{1,3}\.\d+,?\s*(?i:longitude)\s*:?\s*-?\d{1,3}\.\d+"), None, 0),
     ("PERSON", re.compile(r"(?i:full\s+name|name|signature|signed|cardholder(?:\s+name)?|beneficiary(?:\s+name)?|"
-                          r"account\s+holder|applicant|borrower|patient|employee\s+name|customer\s+name|attn|attention)"
+                          r"account\s+holder|applicant|borrower|patient|employee\s+name|customer\s+name|attn|attention|"
+                          r"nom|prénom|nom\s+complet|destinataire|expéditeur|titulaire|bénéficiaire|empfänger|auftraggeber|"
+                          r"kontoinhaber|vollständiger\s+name|nombre|nombre\s+completo|titular|beneficiario|nome|nome\s+completo|"
+                          r"intestatario|naam|volledige\s+naam|begunstigde|rekeninghouder|namn)"
                           r"[\"']?\s*(?:[:=>]|\bis\b)\s*[\"']?\s*"
                           r"(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){1,3})"), None, 1),
     ("ROUTING", re.compile(r"(?i:routing|aba)\s*(?i:number|no\.?|#)?\s*[:#]?\s*(\d{9})\b"), None, 1),
@@ -102,13 +117,19 @@ PATTERNS = [
     ("SECRET", re.compile(r"(?<![\w@])[^\s\"'<>()\[\]{},;]{10,40}(?![\w])"),
      lambda m: sum(bool(re.search(rx, m.group())) for rx in (r"[a-z]", r"[A-Z]", r"\d", r"[^\w\s]")) >= 4
      and not re.search(r"https?:|www\.|@|\.(?:com|org|net)\b|^\$|[.,:]$|[:/|=]|^\(|\d{5}|-\d{4}", m.group()), 0),
+    ("ADDRESS", re.compile(r"\b\d{1,5}[a-z]?,?\s+" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d')\s*)*"
+                           + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|étage)\.?\s*#?\w+)?" + ADDR_TAIL), None, 0),
+    ("ADDRESS", re.compile(r"\b" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d')\s*)*"
+                           + CAP + r"(?:\s+" + CAP + r"){0,3},?\s+\d{1,5}[a-z]?\b" + ADDR_TAIL), None, 0),
+    ("ADDRESS", re.compile(r"\b(?:\d{1,5}\s+)?" + r"[A-ZÀ-ÖØ-ÞĀ-Ž][^\W\d_]*" + STREET_SUFFIX + r"\b(?:\s+\d{1,5}[a-z]?(?:/\d+)?)?"
+                           r"(?:,?\s*(?i:apt|apartment|wohnung)\.?\s*#?\w+)?" + ADDR_TAIL), None, 0),
     ("ADDRESS", re.compile(r"(?:\b\d{1,3}(?:st|nd|rd|th)\s+(?i:floor),\s*)?"
                            r"\b\d{1,6}\s+(?:" + CAP + r"\s+){1,4}" + STREET + r"\b\.?"
                            r"(?:,?\s*(?i:apt|apartment|suite|unit|ste|floor)\.?\s*#?\w+)?"
                            # then up to four parts: city, state, postcode, country
                            r"(?:,?\s+(?:[A-Z]{2}\s+\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d|[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}|\d{5})"
                            r"|,\s*(?:" + CAP + r"(?:\s+" + CAP + r"){0,2}|[A-Z]{2}|\d{4,6})){0,4}"), None, 0),
-    ("PERSON", re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Dr|Prof)\.?\s+(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){0,3})"), None, 1),
+    ("PERSON", re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Dr|Prof|M|Mme|Mlle|Monsieur|Madame|Herr|Frau|Sr|Sra|Señor|Señora|Sig|Sig\.ra|Signor|Signora|Dhr|Mevr|Mevrouw)\.?\s+(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){0,3})"), None, 1),
     ("PERSON", re.compile(r"(?i:dear|sincerely|regards|best)\s*,?\s+(" + CAP + r"(?:\s+(?:[A-Z]\.|" + CAP + r")){1,3})"), None, 1),
 ]
 
@@ -124,22 +145,24 @@ def find_patterns(text: str) -> list[Span]:
 
 
 NER_LABELS = {"PER": "PERSON", "LOC": "ADDRESS", "ORG": "ORG"}
-_NER = None
+# "en": English-only BERT (MIT). "multi": XLM-RoBERTa for de/en/es/fr/it/nl/pt and
+# others (AFL-3.0), slower.
+NER_MODELS = {"en": "dslim/bert-base-NER", "multi": "Davlan/xlm-roberta-base-ner-hrl"}
+_NER: dict = {}
 
 
-def _pipeline():
-    global _NER
-    if _NER is None:
+def _pipeline(model: str = "en"):
+    if model not in _NER:
         from transformers import pipeline
-        _NER = pipeline("token-classification", model="dslim/bert-base-NER",
-                        aggregation_strategy="simple", device=-1)
-    return _NER
+        _NER[model] = pipeline("token-classification", model=NER_MODELS[model],
+                               aggregation_strategy="simple", device=-1)
+    return _NER[model]
 
 
-def find_entities(text: str, min_score: float = 0.6, chunk: int = 1500) -> list[Span]:
+def find_entities(text: str, min_score: float = 0.6, chunk: int = 1500, model: str = "en") -> list[Span]:
     """People, places and organisations from the NER model. Long text is read in
     overlapping chunks because the model sees at most 512 tokens."""
-    out, ner = [], _pipeline()
+    out, ner = [], _pipeline(model)
     step = chunk - 200
     for base in range(0, max(1, len(text)), step):
         part = text[base: base + chunk]
@@ -199,8 +222,8 @@ def propagate(text: str, spans: list[Span]) -> list[Span]:
     return out
 
 
-def detect(text: str, use_model: bool = True, labels: set[str] | None = None) -> list[Span]:
-    spans = find_patterns(text) + (find_entities(text) if use_model else [])
+def detect(text: str, use_model: bool = True, labels: set[str] | None = None, model: str = "en") -> list[Span]:
+    spans = find_patterns(text) + (find_entities(text, model=model) if use_model else [])
     if labels is not None:
         spans = [s for s in spans if s.label in labels]
     return merge(propagate(text, merge(spans)))
