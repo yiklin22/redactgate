@@ -65,6 +65,9 @@ STREET_FIRST = (r"(?i:rue|avenue|boulevard|bd|chemin|allée|place|impasse|quai|r
                 r"pasaje|paseo|plaza|carrera|carrer|ronda|travesía|via|viale|piazza|corso|largo|strada|vicolo|contrada|rua|"
                 r"acceso|alameda|bajada|callejón|cañada|carretera|cuesta|glorieta|pasadizo|rambla|urbanización|vía|"
                 r"borgo|canale|incrocio|piazzale|rotonda|salita|stretto)")
+# A postcode somewhere after a comma (not a bare year): "00193", "I-00193", "SW1A 1AA", "H2Y 2K4".
+_POSTCODE_AFTER_COMMA = (r",.*?(?:\b(?:[A-Z]{1,2}-?)?(?!(?:19|20)\d\d\b)\d{4,6}\b|"
+                         r"\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b|\b[A-Z]\d[A-Z]\s?\d[A-Z]\d\b)")
 AMBIGUOUS_FIRST = {"acceso", "alameda", "bajada", "callejón", "cañada", "carretera", "cuesta", "glorieta", "pasadizo",
                    "rambla", "urbanización", "vía", "borgo", "canale", "incrocio", "piazzale", "rotonda", "salita", "stretto"}
 # Street types joined to the end of the name (Schnellstraße, Kayleighstraat, Åkervägen).
@@ -155,7 +158,7 @@ PATTERNS = [
     ("ADDRESS", re.compile(r"\b\d{1,5}[a-z]?,?\s+" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
                            + CAP + r"(?:\s+" + CAP + r"){0,3}(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL),
      lambda m: not (re.match(r"\d+[a-z]?,?\s+(\w+)", m.group()).group(1).lower() in AMBIGUOUS_FIRST
-                    and not re.search(r",\s*(?:[A-Z]{1,2}-?)?\d{4,6}\b", m.group()) and re.search(r"(?:^|[^\w])[A-ZÀ-ÖØ-Þ][^\W\d_]*[ \t]+$", m.string[max(0, m.start() - 40):m.start()])), 0),
+                    and not re.search(_POSTCODE_AFTER_COMMA, m.group()) and re.search(r"(?:^|[^\w])[A-ZÀ-ÖØ-Þ][^\W\d_]*[ \t]+$", m.string[max(0, m.start() - 40):m.start()])), 0),
     ("ADDRESS", re.compile(r"\b" + STREET_FIRST + r"\s+(?:(?i:de|del|de la|des|du|di|della|dei|da|la|le|les|el|los|las|y|d'|d’|l'|l’)\s*)*"
                            + CAP + r"(?:\s+" + CAP + r"){0,3},?\s+\d{1,5}[a-z]?\b"
                            r"(?:,?\s*(?i:apt|apartment|appartamento|piso|piano|puerta|étage)\.?\s*#?\w+)?" + ADDR_TAIL + LINE_TAIL), None, 0),
