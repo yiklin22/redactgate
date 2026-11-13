@@ -113,14 +113,16 @@ What the numbers mean:
   "routing number") is next to them. Real documents may behave differently.
 - **One methodology slip:** the very first patterns-only run (before the dev
   split existed) was on the test split. All tuning after that used dev only.
-- A shortened name ("Mr. Quesada" after "Jerónimo E. Quesada") gets its own
-  placeholder, so the model does not know they are the same person.
+- A shortened name ("Mr. Quesada" after "Jerónimo E. Quesada") becomes
+  `[PERSON_1_LAST]`, so the model can tell it is the same person as
+  `[PERSON_1]`. Restore also accepts placeholders a model wrote without
+  brackets. Without the model (patterns only), first names are often missed.
 
 ## Run it
 
 ```bash
 uv venv && uv pip install torch transformers sentencepiece protobuf fastapi uvicorn jinja2 python-multipart pyarrow pdfplumber python-docx pytest httpx reportlab
-pytest -q                                  # 10 tests (patterns only; no model download)
+pytest -q                                  # 11 tests (patterns only; no model download)
 uvicorn redactgate.app:app --port 8840     # page at http://localhost:8840
 ```
 

@@ -4,7 +4,7 @@
 - Characters of personal data masked: 7769/9998 = 77.7%
 - Documents with at least one labelled personal value left unmasked: 92/200 = 46.0%
 - Masked characters inside a labelled span (precision lower bound): 62.3%
-- Time: 25 s, 126 ms per document on CPU
+- Time: 25 s, 127 ms per document on CPU
 
 | label | masked | total | rate |
 |---|---|---|---|

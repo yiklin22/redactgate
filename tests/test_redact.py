@@ -50,3 +50,10 @@ def test_address_pieces_join():
     t = "Bitte an Schnellstraße 12, 45678 Berlin senden."
     red, _ = redact(t, use_model=False)
     assert red == "Bitte an [ADDRESS_1] senden."
+
+
+def test_surname_points_to_the_full_name_and_bare_placeholders_restore():
+    text = "Refund Ms. Ana Lima for order 5531. Dear Ms. Lima, sorry. Ana Lima can call us."
+    red, mapping = redact(text, use_model=False)
+    assert red.count("[PERSON_1]") == 2 and "[PERSON_1_LAST]" in red
+    assert restore("Dear Ms. PERSON_1_LAST, we refunded [PERSON_1].", mapping) == "Dear Ms. Lima, we refunded Ana Lima."
